@@ -24,7 +24,7 @@ Let's take a look at passive one. Despite of its name, it is a way more expensiv
 
 No. Every electric, electronic, and radio frequency appliances, are suffered from this. Larger is better and more effective always; however, there is **not possible** to make cavity resonators (= filters) for GHz and THz larger than wavelength allows, sadly.
 
-Well, hhopefully, there are two good news:
+Well, hopefully, there are two good news:
 1. Typical microphone (let's take regular SM58: it will be fake most probably, anyway we can't obtain correct one) have some space inside of its enclosure;
 2. Transformers can be paralleled with no losses, but only gains. And special winding is not required for that. So, we can use two easily available 600:600 Ohm with (1+1):(1+1) windings, of largest possible size, which fits the SM58 body.
 
@@ -74,6 +74,15 @@ Note that `alsamixer` should be used to set same settings for both ADCs.
 Btw, one may note that _float value storage_  is implemented in same way: It have momentary SNR of 25 bits (24 + sign) (for 32-bit floats), while way more long-time dynamic range. It is just full of these transition points each 3 dB.
 
 Here are test results with test signal source. One may recall that 3rd order IMD's extra frequency components (easily seen as extra blue peaks) are _extremely_ sensitive to any overload as non-linearity. So one may exactly know if no IMD are introduced, when no extra peaks.
+
+<img width="732" height="373" alt="mightymic-test-snr" src="https://github.com/user-attachments/assets/a8f257d7-e90b-43ed-abab-e8ddec5e0f3c" />
+
+<details> 
+<summary>[Command]</summary>
+  
+    jasmine-sa MightyMic:Out0 MightyMic:Thru MightyMic:ThruPeak -h 330,530 -d -60,0,6
+      
+</details>
 
 > [!Note]
 > White ray traces on picture, are overlayed red and yellow.
