@@ -102,5 +102,18 @@ We let our readers to answer it.
 **What if windings (and/or taps) are not perfectly balanced?**
 
 Our setup is highly immune to that. Some differential non-equivalency are easily rejected by definition of differential signals. Non-symmetric taps measured & agjusted using `Ratio` knob & scale.
+
+Glossary
+--------
+* LNA: Low noise amplifier.
+* SNR: Signal to Noise ratio.
+* EMI: Electromagnetic interference, cables pickup noise due to it.
+* ADC: Andlog to Digital converter, like _input_ of PC or sound card. 
+* Mixing: Audio people uses it as (linear) _adding_ but not multiplying.
+* THD: Total harmonic distortion, most often due to non-linearity. Sum of all IMDx.
+* IMD: Intermodulation distortion. Most important is IMD3 part, because it falls to in-band.
+* TBD: To be displayed.
+* WIP: Work in progress.
+
  
 [^1]: https://www.eeweb.com/enhance-adc-dynamic-range/
