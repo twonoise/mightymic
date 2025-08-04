@@ -35,7 +35,7 @@ Let's connect it as pictured:
 
 <img width="366" height="527" alt="mic" src="https://github.com/user-attachments/assets/ff320d21-51c4-4be3-92f5-d827e4225def" />
 
-As one can see, there is no more than 4x amplitude gain (when we use `A` & `C` pins). If one need more, then way more expensive custom transformers are need, and this setup will be even more sensitive to connecting cable capacitance (yes, this is some disadvantage of passive approach, and 150- or even 300-Ohms cables are recommended here, instead of regular 50/75-Ohms ones).
+As one can see, there is no more than 4x amplitude gain (when we use `A` & `E` pins). If one need more, then way more expensive custom transformers are need, and this setup will be even more sensitive to connecting cable capacitance (yes, this is some disadvantage of passive approach, and 150- or even 300-Ohms cables are recommended here, instead of regular 50/75-Ohms ones).
 
 Now we can connect it to some low noise ADC. There is known approach how to reduce ADC noise at the expence of get only half possible souns channels [^1].
 We will use same trick, but been even more smart: Mixing stereo to mono, we will not **add**, but **subtract** channels, which, giving us exactly same internal ADC noise power reduction, but, also creates perfect _differential_ input (please read separately if you in doubt why and how differential signalling used and works).
