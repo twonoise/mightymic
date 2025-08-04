@@ -20,7 +20,11 @@ Active are "simple" (and cheap today), and they are "just" an LNA, placed near c
 
 Let's take a look at passive one. Despite of its name, it is a way more expensive, due to it requires high quality wideband transformer. The key parameter of transformer is windings _inductance_. That means either very high magnetic permeability yet wide frequency band core (often impossible to obtain today); or, regular ferrite, but, to keep inductance, it will be very large (at least, way larger than you can find in some microphones). Largest possible size also unavoidable to keep both _resistive_ and _magnetic_ power losses (we have _too_ little power to just lost it!).
 
-Hopefully, there are two good news:
+> Isn't "Larger size = lower losses" rule wrong and should be opposite?
+
+No. Every electric, electronic, and radio frequency appliances, are suffered from this. Larger is better and more effective always; however, there is **not possible** to make cavity resonators (= filters) for GHz and THz larger than wavelength allows, sadly.
+
+Well, hhopefully, there are two good news:
 1. Typical microphone (let's take regular SM58: it will be fake most probably, anyway we can't obtain correct one) have some space inside of its enclosure;
 2. Transformers can be paralleled with no losses, but only gains. And special winding is not required for that. So, we can use two easily available 600:600 Ohm with (1+1):(1+1) windings, of largest possible size, which fits the SM58 body.
 
