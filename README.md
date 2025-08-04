@@ -9,10 +9,10 @@ DESCRIPTION
 
 Microphones are _noisy_. That's not a big secret. Very low output amplitude of most microphone transducers ("capsules") available, means high white noise level added to output signal by the following circuit, as well as high EMI noise on connecting cable.
 
-Microphone noise gets way more frustrating if one tries to use some (digital) compressors to somewhat rectify level variations in sound processing plugins path: compressors are considerably increase noise at silent parts of vocal (when noise already most noticeable). While for pure electronic music there is infinite SNR, so no any noise to increase by compressors, but, mic signals are opposite for that, sadly.
+Microphone noise gets way more frustrating if one tries to use some analog or digital **AGC** and/or digital **compressors** to somewhat rectify level variations in sound processing plugins path: they both are considerably increase noise at silent parts of vocal (when noise already most noticeable). While for pure electronic music there is infinite SNR, so no any noise to increase by compressors, but, mic signals are opposite for that, sadly.
 
 > [!Note]
-> Compressors can't fix already overloaded input.
+> Digital plugins can't fix already overloaded input.
 
 Large amount of ways to fight with both types of mentioned noise sources were invented, and they all can be divided to **passive** and **active** approaches (and with rocket priced setups, both are **combined**; we will omit this case here).
 
@@ -98,6 +98,14 @@ Q & A
 **Can this plugin be made even more strong, with same hardware?**
 
 We let our readers to answer it.
+<details> 
+<summary>[Spoiler]</summary>
+I think there is more than one way possible with <em>same</em> hardware.
+  
+* When no 1st (main) stage overload, take not just it, but sum of both (main + peak). Shuold reduce noise ~1.5 times (~2 db) further.
+* Use some trainable AI to "guess" lost peaks, when all stages are overloaded; but rarely possible with `Faust`, i think.
+</details>
+
 
 **What if windings (and/or taps) are not perfectly balanced?**
 
@@ -108,7 +116,8 @@ Glossary
 * LNA: Low noise amplifier.
 * SNR: Signal to Noise ratio.
 * EMI: Electromagnetic interference, cables pickup noise due to it.
-* ADC: Andlog to Digital converter, like _input_ of PC or sound card. 
+* ADC: Andlog to Digital converter, like _input_ of PC or sound card.
+* AGC: Auto gain control.
 * Mixing: Audio people uses it as (linear) _adding_ but not multiplying.
 * THD: Total harmonic distortion, most often due to non-linearity. Sum of all IMDx.
 * IMD: Intermodulation distortion. Most important is IMD3 part, because it falls to in-band.
