@@ -46,7 +46,9 @@ Note that some motherboards are not exposes true stereo blue line input connecto
 
 Next step is tune up our line input to be less noisy yet non-scaling (24-bit ADC output is not altered by codec level scalers). Using `alsamixer`, we carefully tune both `Line Boost` and `Capture` sliders of Capture tab (`F4`) of alsamixer, when check using data flow statistics with [jasmine-sa](https://github.com/twonoise/jasmine-sa) (`F10` then `F1`) to get 24 bit data flow. Mine is `Line Boost`=100 and `Capture`=33. Line input itself can be unconnected when tune up bit depth using `Capture` control; but for set up best _level_ and _SNR_ using `Line Boost` control, it is worth to connect some clean sound to it and estimate SNR using our spectrum analyzer or other measurement.
 
-Now it's time to add differential input plugin to our audio plugin host like `Carla`, and one may enjoy lowest possible noise with such a cheap components.
+Now it's time to add differential input plugin to our audio plugin host like `Carla`, and one may enjoy lowest possible noise with such a cheap components:
+
+<img width="328" height="216" alt="mic-Carla" src="https://github.com/user-attachments/assets/9d0c2c80-88b2-4361-ac1f-1aeabd6a384d" />
 
 But if mic is fake (output amplitude of capsule is low, or, capsule DC resistance is _too_ hidh for that output), singer can note earlier on later that there is **low dynamic range** of our setup (or, which is same, still low SNR). Are we take all the best our setup offers, or time to think more?
 
