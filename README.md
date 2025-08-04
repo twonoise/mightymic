@@ -22,7 +22,7 @@ Let's take a look at passive one. Despite of its name, it is a way more expensiv
 
 > Isn't "Larger size = lower losses" rule wrong and should be opposite?
 
-No. Every electric, electronic, and radio frequency appliances, are suffered from this. Larger is better and more effective always; however, there is **not possible** to make cavity resonators (= filters) for GHz and THz larger than wavelength allows, sadly.
+No. Every electric, electronic, and radio frequency appliances, are suffered from this. Larger is better and more effective always. Don't worry if tiny power from membrane is not enough to drive palm sized transformer: it will. Btw, however, there is **not possible** to make cavity resonators (= filters) for GHz and THz larger than wavelength allows, sadly (oh, sorry for off-topic).
 
 Well, hopefully, there are two good news:
 1. Typical microphone (let's take regular SM58: it will be fake most probably, anyway we can't obtain correct one) have some space inside of its enclosure;
