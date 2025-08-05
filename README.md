@@ -114,7 +114,7 @@ Such approach can be expanded by yet another extra stage for peaks, but we need 
 
 Q & A
 -----
-**Can this plugin be made even more strong, with same hardware?**
+**Can this plugin be made even more strong, with _same_ hardware?**
 
 We let our readers to answer it.
 <details> 
@@ -125,6 +125,9 @@ I think there is more than one way possible with <em>same</em> hardware.
 * Use some trainable AI to "guess" lost peaks, when all stages are overloaded; but rarely possible with `Faust`, i think.
 </details>
 
+**I need even better SNR, maybe _another_ passive hardware possible?**
+
+You will need to decrease windings resistance, as it is source of thermal noise. To keep inductance, this is possible either with very rare and fragile permalloy or similar core, of at least same size; or, larger transformer(s) need, will do not fit mic body any more. Pure silver wire winding also helps, but not so much.
 
 **What if windings (and/or taps) are not perfectly balanced?**
 
