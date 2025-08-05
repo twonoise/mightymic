@@ -9,7 +9,7 @@ DESCRIPTION
 
 Microphones are _noisy_. That's not a big secret. Very low output amplitude of most microphone transducers ("capsules") available, means high white noise level added to output signal by the following circuit, as well as high EMI noise on connecting cable.
 
-Microphone noise gets way more frustrating if one tries to use some analog or digital **AGC** and/or digital **compressors** to somewhat rectify level variations in sound processing plugins path: they both are considerably increase noise at silent parts of vocal (when noise already most noticeable). While for pure electronic music there is infinite SNR, so no any noise to increase by compressors, but, mic signals are opposite for that, sadly.
+Microphone noise gets way more frustrating if one tries to use some analog or digital **AGC** and/or digital **compressors** to somewhat rectify level variations: they both are considerably increase noise at silent parts of vocal (when noise already most noticeable). While for pure electronic music there is infinite SNR, so no any noise to increase by compressors, but, mic signals are opposite for that, sadly.
 
 > [!Note]
 > Digital plugins can't fix already overloaded input.
