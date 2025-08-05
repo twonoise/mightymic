@@ -38,7 +38,13 @@ Let's connect it as pictured:
 As one can see, there is no more than 4x amplitude gain (when we use `A` & `E` pins). If one need more, then way more expensive custom transformers are need, and this setup will be even more sensitive to output cable capacitance (yes, this is some disadvantage of passive approach, and 150- or even 300-Ohms cables are recommended here, instead of regular 50/75-Ohms ones).
 
 Now we can connect it to some low noise ADC. There is known approach how to reduce ADC noise at the expence of get only half possible sound channels [^1].
-We will use same trick, but been even more smart: Mixing stereo to mono, we will not **add**, but **subtract** channels, which, giving us exactly same internal ADC noise power reduction, but, also creates perfect _differential_ input (please read separately if you in doubt why and how differential signalling used and works).
+We will use same trick, but been even more smart: Mixing stereo to mono, we will not **add**, but **subtract** channels, which, giving us exactly same internal ADC noise power reduction, but, also creates perfect _differential_ input.
+
+> [!Tip]
+> Please read separately if you in doubt why and how differential signalling used and works.
+
+> [!Note]
+> Musicians often calls it _balanced_ (or _symmetrical_) wiring, it is same as differential one.
 
 At other side, one may note that our schematic use exactly differential output. So it's time to connect it. We will use regular sound card line input, available on PC motherboards: while it is known they are perfect _except_ ENOB, but it, looks like, enough for our microphone setup.
 
@@ -48,7 +54,11 @@ Next step is tune up our line input to be less noisy yet non-scaling (24-bit ADC
 
 Now it's time to add differential input plugin to our audio plugin host like `Carla`, and one may enjoy lowest possible noise with such a cheap components.
 
-But if mic is fake (output amplitude of capsule is low, or, capsule DC resistance is _too_ hidh for that output), singer can note earlier on later that there is **low dynamic range** of our setup (or, which is same, still low SNR). Are we take all the best our setup offers, or time to think more?
+<img width="369" height="119" alt="carla-diff-iama" src="https://github.com/user-attachments/assets/857aab40-cf5e-4671-a204-58b071c68ae0" />
+
+     
+<br>
+Well, that works fine. But if mic is fake (output amplitude of capsule is low, or, capsule DC resistance is _too_ hidh for that output), singer can note earlier on later that there is **low dynamic range** of our setup (or, which is same, still low SNR). Are we take all the best our setup offers, or time to think more?
 
 Best solution here is, exactly with loudspeakers world, is just to add extra microphone. But it is weird for singer to hangle this setup in hand, so it is "best" electrically only, and quite weird in practice. Another ideas?
 
@@ -56,7 +66,7 @@ When ADCs quantity is enough (in our case, if we have one more _stereo_ ADC), i 
 
 The problem is resistive tap is rarely useful due to resistors itself adds noise. Recall these `B` and `D` transformer taps? Yes, you're got the idea.
 
-> Wut? 4-wire microphone? :-[   ]
+> Wut? 4-wire microphone? :-[     ]
 
 It is 5-wire.
 
