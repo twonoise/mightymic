@@ -26,7 +26,7 @@ No. Every electric, electronic, and radio frequency appliances, are suffered fro
 
 Well, hopefully, there are two good news:
 1. Typical microphone (let's take regular SM58: it will be fake most probably, anyway we can't obtain correct one) have some space inside of its enclosure;
-2. Transformers can be paralleled with no losses, but only gains. And special winding is not required for that. So, we can use two easily available 600:600 Ohm with (1+1):(1+1) windings, of largest possible size, which fits the SM58 body.
+2. Several transformers can be joined together with no losses, but only gains, to mimic larger one. And special winding is not required for that. So, we can use two easily available 600:600 Ohm with (1+1):(1+1) windings, of largest possible size, which fits the SM58 body.
 
 Let's connect it as pictured:
 
