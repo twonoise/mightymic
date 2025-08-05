@@ -37,7 +37,7 @@ How it looks using 26x20 mm sized core, 18 mm bobbin width 600:600 Ohm transform
 > [!Tip]
 > Pins should be grinded out almost completely to fit the crank, but note that windings are extremely thin, this is most hard thing of our research.
 
-![beta58a](https://github.com/user-attachments/assets/fa513920-8609-4880-9abd-9fc6c988c1a8)
+![beta58a](https://github.com/user-attachments/assets/53336034-e74a-4e30-88b9-28c3bc8242e2)
 
 As one can see, there is no more than 4x amplitude gain (when we use `A` & `E` pins). If one need more, then way more expensive custom transformers are need, and this setup will be even more sensitive to output cable capacitance (yes, this is some disadvantage of passive approach, and 150- or even 300-Ohms cables are recommended here, instead of regular 50/75-Ohms ones).
 
