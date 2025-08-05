@@ -129,6 +129,11 @@ I think there is more than one way possible with <em>same</em> hardware.
 
 You will need to decrease windings resistance, as it is source of thermal noise. To keep inductance, this is possible either with very rare and fragile permalloy or similar core, of at least same size; or, larger transformer(s) need, will do not fit mic body any more. Pure silver wire winding also helps, but not so much.
 
+Here is triple effect on SNR:
+* Less thermal noise;
+* Less power loss due to winding resistance;
+* Less power loss due to core losses.
+
 **What if windings (and/or taps) are not perfectly balanced?**
 
 Our setup is highly immune to that. Some differential non-equivalency are easily rejected by definition of differential signals. Non-symmetric taps measured & agjusted using `Ratio` knob & scale.
