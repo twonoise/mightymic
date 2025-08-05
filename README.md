@@ -1,5 +1,5 @@
 # mightymic
-High dynamic range passive mic with Faust
+High dynamic range passive mic with JACK, LV2, and Faust
 
 > [!Note]
 > Decibels used here, are _re: amplitude_.
@@ -76,13 +76,19 @@ We will use 5(7)-pin DIN connector, some extra wiring, and one extra stereo ADC,
 > Read here (TBD) to know if your motherboard (or pci-e sound card) have it. In short, **ALC887** onboard codec, and **ASUS Xonar** card (**ALC1220** codec) are have it, and are tested. While **ALC897** or **ALC283** are only one ADC, sadly.
 
 Now we will need some gate to switch main and peak outputs. I've make it using `Faust` and `faust2lv2` compiler. Comparator here is sharp and momentary (per-sample), but feel free to implement one with some transition band, if you find this approach useful but need to lower gating THD even further; while current is quite low.
-It is important to tune `Ratio` parameter correctly (it is run time knob, no need to change code). We have ratio estimate output meter for that, just give some non-overloading sound to mic. Then set this measured value (often near 0.5) with `Ratio` knob.
+
+> [!Important]
+> Tune `Ratio` parameter correctly.
+
+It is run time knob, no need to change code. We have ratio estimate output meter for that, just give some non-overloading sound to mic. Then set this measured value (often near 0.5) with `Ratio` knob.
 
 <img width="328" height="216" alt="mic-Carla" src="https://github.com/user-attachments/assets/9d0c2c80-88b2-4361-ac1f-1aeabd6a384d" />
 
 
 We offer also test signal source (using `Faust`, again) as sum of 420 and 440 Hz sine waves, with two fully differential outputs, main one and "taped" (reduced or peak) one; and peak output can be switched off by runtime button. Noise of equal levels are added to outputs, to emulate input noise of the following circuit (ADCs), which makes possible the measurements below.
-Note that `alsamixer` should be used to set same settings for both ADCs.
+
+> [!Important]
+> `alsamixer` should be used to set same settings for both ADCs.
 
 Btw, one may note that _float value storage_  is implemented in same way: It have momentary SNR of 25 bits (24 + sign) (for 32-bit floats), while way more long-time dynamic range. It is just full of these transition points each 3 dB.
 
@@ -137,5 +143,12 @@ Glossary
 * TBD: To be displayed.
 * WIP: Work in progress.
 
- 
+LICENSE
+-------
+
+This research text description, together with its inlined pictures, are licensed under Creative Commons Attribution 4.0. You are welcome to contribute to the description in order to improve it so long as your contributions are made available under this same license.
+
+Included software is licensed as per LICENSE file.
+
+
 [^1]: https://www.eeweb.com/enhance-adc-dynamic-range/
