@@ -28,12 +28,16 @@ Well, hopefully, there are two good news:
 1. Typical microphone (let's take regular SM58: it will be fake most probably, anyway we can't obtain correct one) have some space inside of its enclosure;
 2. Transformers can be paralleled with no losses, but only gains. And special winding is not required for that. So, we can use two easily available 600:600 Ohm with (1+1):(1+1) windings, of largest possible size, which fits the SM58 body.
 
-> [!Tip]
-> Pins should be shortened almost completely to fit the crank, but note that windings are extremely thin, this is most hard thing of our research.
-
 Let's connect it as pictured:
 
 <img width="183" height="264" alt="mic" src="https://github.com/user-attachments/assets/ff320d21-51c4-4be3-92f5-d827e4225def" />
+
+> [!Tip]
+> Pins should be grinded out almost completely to fit the crank, but note that windings are extremely thin, this is most hard thing of our research.
+
+How it looks using 26x20 mm sized core, 18 mm bobbin width 600:600 Ohm transformers:
+
+![beta58a](https://github.com/user-attachments/assets/fa513920-8609-4880-9abd-9fc6c988c1a8)
 
 As one can see, there is no more than 4x amplitude gain (when we use `A` & `E` pins). If one need more, then way more expensive custom transformers are need, and this setup will be even more sensitive to output cable capacitance (yes, this is some disadvantage of passive approach, and 150- or even 300-Ohms cables are recommended here, instead of regular 50/75-Ohms ones).
 
