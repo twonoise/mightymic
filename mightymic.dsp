@@ -1,4 +1,4 @@
-// faust2lv2 mightymic.dsp  &&  sed -i -e 's/in0/In/g' -e 's/in1/InInv/g' -e 's/in2/InPeak/g' -e 's/in3/InPeakInv/g' -e 's/out0/Out0/g' -e 's/out1/Out1/g' -e 's/out2/Thru/g' -e 's/out3/ThruPeak/g' -e 's/out4/UNUSED0/g' -e 's/out5/UNUSED1/g' -e 's/out6/UNUSED1/g' -e '/lv2:name "Overload/a\\tlv2:portProperty lv2:integer ;' mightymic.lv2/mightymic.ttl  &&  cp -R ./mightymic.lv2/ /usr/local/lib/lv2/
+// faust2lv2 mightymic.dsp  &&  sed -i -e 's/in0/In/g' -e 's/in1/InInv/g' -e 's/in2/InPeak/g' -e 's/in3/InPeakInv/g' -e 's/out0/Out0/g' -e 's/out1/Out1/g' -e 's/out2/Thru/g' -e 's/out3/ThruPeak/g' -e 's/out4/UNUSED0/g' -e 's/out5/UNUSED1/g' -e 's/out6/UNUSED2/g' -e '/lv2:name "Overload/a\\tlv2:portProperty lv2:integer ;' mightymic.lv2/mightymic.ttl  &&  cp -R ./mightymic.lv2/ /usr/local/lib/lv2/
 
 declare name "MightyMic"; // No spaces for better JACK port names.
 declare version "2025";
@@ -43,9 +43,9 @@ process =
   // _,_ <: // Straight and Attenuated: single (UNbalanced) inputs
 
   // 1. Two identical mono outputs
-  (mux2 : fi.lowpass(FLT_ORD, AUDIO_BW_HZ) <: _,_),
+  (mux2 : fi.lowpass(FLT_ORD, AUDIO_BW_HZ) <: _,_) ,
   // 2. Thru line (outputs) unbalanced, Straight and Attenuated.
-  (_,_),
+  (_,_) ,
   // How it compiles, but adds extra unused audio ports.
   // 3. LEDS, with unneeded outputs.
   //    Rename to UNUSED also included in command above as a workaround.
@@ -55,6 +55,6 @@ process =
   // ((overloadLed : int : vbargraph("Overload0 [CV:0]", 0, 1) : !),
   //  (overloadLed : int : vbargraph("Overload1 [CV:1]", 0, 1) : !) )
 
-  , (ratioMeasured : vbargraph("Ratio Meas. [CV:2]", 0, 1))
-
+  // 4. Ratio measured display output.
+  , (ratioMeasured : vbargraph("Ratio Meter [CV:2]", 0, 1))
 ;
