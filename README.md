@@ -32,10 +32,10 @@ Let's connect it as pictured:
 
 <img width="183" height="264" alt="mic" src="https://github.com/user-attachments/assets/ff320d21-51c4-4be3-92f5-d827e4225def" />
 
+How it looks using 26x20 mm sized core, 18 mm bobbin width 600:600 Ohm transformers:
+
 > [!Tip]
 > Pins should be grinded out almost completely to fit the crank, but note that windings are extremely thin, this is most hard thing of our research.
-
-How it looks using 26x20 mm sized core, 18 mm bobbin width 600:600 Ohm transformers:
 
 ![beta58a](https://github.com/user-attachments/assets/fa513920-8609-4880-9abd-9fc6c988c1a8)
 
