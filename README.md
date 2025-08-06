@@ -110,7 +110,7 @@ Here are test results with test signal source. One may recall that 3rd order IMD
 > [!Note]
 > White ray traces on picture, are overlayed red and yellow.
 
-One can see that we have extra SNR (lower noise floor) around or more than 2 dB at output of our plugin when it work at full its power (loud constant yelling), compared to using only one mic output with its max non-overloaded level. SNR will npt degraded but only better (up to 3 dB) when yelling reduces. These 2 dB are long-time value, and distributed like 0 dB at loudest yet non-overloaded peaks (where masked well, makes it all better) and 3 db between peaks.
+One can see that we have extra SNR (lower noise floor) around, or more than, 2 dB at output of our plugin when it work at full its power (loud constant yelling), compared to using only one mic output with its max non-overloaded level. SNR will npt degraded but only better (up to 3 dB) when yelling reduces. These 2 dB are long-time value, and distributed like 0 dB at loudest yet non-overloaded peaks (where masked well, makes it all better) and 3 db between peaks.
 
 Btw, why these 3 dB, if no peaks, just normal underloaded input? This is because we attenuate main channel by 3 dB (or more precisely, by ratio amount, like windings tap ratio) _always_, so noise are reduced by 3 dB along with the signal.
 
@@ -144,14 +144,15 @@ Our setup is highly immune to that. Some differential non-equivalency are easily
 
 **Disadvantages?**
 
-Both stereo ADCs should form a perfect tandem, in terms of timings (relative skew and it's wander) (as well as already mentioned amplitude and preamp gain match). It is known that for `JACK` setup and `ALCxxx` codecs, and `alsamixer`, this is true; but your setup can differ, and it is not easy to create test set for it to confirm its ideal behaviour. Hopefully, for voice, some skew is acceptable.
+Both stereo ADCs should form a perfect tandem, in terms of timings (relative skew and wander of it), as well as already mentioned amplitude and preamp gain match. (However, it is true for _every_ music work station). It is known that for `JACK` setup and `ALCxxx` codecs, and `alsamixer`, this is true; but your setup can differ, and it is not easy to create test set for it to confirm its ideal behaviour. Hopefully, for voice, some skew is acceptable.
 
-Amplitudes mismatch (imperfect `Ratio` value) can create some distortions at the points where gate flip flops. This is mostly fixed with included LFP filter. Probably, there is auto `Ratio` calculation possible, but not easy. It should be like step error detector, integrator, and feedback. It can rectify possible skew also. Ask me if you really need it.
+Amplitudes mismatch (imperfect `Ratio` value) can create some distortions at the points where gate flip flops. This is mostly fixed with included LPF. Probably, there is automatic calculation of `Ratio` possible, but not easy. It should be like step error detector, integrator, and feedback. It can rectify possible skew also. Ask me if you really need it.
 
 Glossary
 --------
 * LNA: Low noise amplifier.
 * SNR: Signal to Noise ratio.
+* LPF: Low pass filter.
 * EMI: Electromagnetic interference, cables pickup noise due to it.
 * ADC: Andlog to Digital converter, like _input_ of PC or sound card.
 * AGC: Auto gain control.
