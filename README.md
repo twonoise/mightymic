@@ -142,6 +142,12 @@ Here is triple effect on SNR:
 
 Our setup is highly immune to that. Some differential non-equivalency are easily rejected by definition of differential signals. Non-symmetric taps measured & agjusted using `Ratio` knob & scale.
 
+**Disadvantages?**
+
+Both stereo ADCs should form a perfect tandem, in terms of timings (relative skew and it's wander) (as well as already mentioned amplitude and preamp gain match). It is known that for `JACK` setup and `ALCxxx` codecs, and `alsamixer`, this is true; but your setup can differ, and it is not easy to create test set for it to confirm its ideal behaviour. Hopefully, for voice, some skew is acceptable.
+
+Amplitudes mismatch (imperfect `Ratio` value) can create some distortions at the points where gate flip flops. This is mostly fixed with included LFP filter. Probably, there is auto `Ratio` calculation possible, but not easy. It should be like step error detector, integrator, and feedback. It can rectify possible skew also. Ask me if you really need it.
+
 Glossary
 --------
 * LNA: Low noise amplifier.
