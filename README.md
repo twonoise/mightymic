@@ -1,11 +1,11 @@
 # mightymic
 High dynamic range passive mic with JACK, LV2, and Faust
 
-> [!Note]
-> Decibels used here, are _re: amplitude_.
-
 DESCRIPTION
 -----------
+
+> [!Note]
+> Decibels used here, are _re: voltage amplitude_.
 
 Microphones are _noisy_. That's not a big secret. Very low output amplitude of most microphone transducers ("capsules") available, means high white noise level added to output signal by the following circuit, as well as high EMI noise on connecting cable.
 
@@ -22,7 +22,16 @@ Let's take a look at passive one. Despite of its name, it is a way more expensiv
 
 > Isn't "Larger size = lower losses" rule wrong and should be opposite?
 
-No. Every electric, electronic, and radio frequency appliances, are suffered from this. Larger is better and more effective always. Don't worry if tiny power from membrane is not enough to drive palm sized transformer: it will. Btw, however, there is **not possible** to make cavity resonators (= filters) for GHz and THz larger than wavelength allows, sadly (oh, sorry for off-topic).
+<!-- Indent seems to be never work, should use workaround. -->
+
+     No. Every electric, electronic, and radio frequency   
+     appliances, are suffered from this. Larger is better  
+     and more effective always. Don't worry if tiny power  
+     from membrane is not enough to drive palm sized  
+     transformer: it will.  
+     Btw, however, there is **not possible** to make cavity  
+     resonators (= filters) for GHz and THz larger than  
+     wavelength allows, sadly (oh, sorry for off-topic).
 
 Well, hopefully, there are two good news:
 1. Typical microphone (let's take regular SM58: it will be fake most probably, anyway we can't obtain correct one) have some space inside of its enclosure;
