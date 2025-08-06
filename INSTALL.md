@@ -8,7 +8,7 @@ Please see at top of `.dsp` files.
 
 Uninstall:
 ---------
-rm -rvf /usr/local/lib/lv2/mightymic.lv2/ 
-rm -rvf /usr/local/lib/lv2/mightymictestsource.lv2/ 
+    rm -rvf /usr/local/lib/lv2/mightymic.lv2/ 
+    rm -rvf /usr/local/lib/lv2/mightymictestsource.lv2/ 
 
 
