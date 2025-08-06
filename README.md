@@ -50,9 +50,12 @@ We will use same trick, but been even more smart: Mixing stereo to mono, we will
 > [!Note]
 > Musicians often calls it _balanced_ (or _symmetrical_) wiring, it is same as differential one.
 
-At other side, one may note that our schematic use exactly differential output. So it's time to connect it. We will use regular sound card line input, available on PC motherboards: while it is known they are perfect _except_ ENOB, but it, looks like, enough for our microphone setup.
+At other side, one may note that our schematic use exactly differential output. So it's time to connect it. We will use regular blue stereo line input, available on PC motherboards: while it is known they are perfect sound cadrs _except_ ENOB, but it, looks like, enough for our microphone setup.
 
-Note that some motherboards are not exposes true stereo blue line input connector, but it often can be obtained via pink noisy mono mic input, using 'hdajackretask' magic, please read separate research for it (TBD, work in progress).
+> [!Note]
+> Some motherboards are not exposes true stereo blue line input connector, but it often can be obtained via pink noisy mono mic input, using `hdajackretask` magic, please read separate research for it (TBD, work in progress).
+>
+> <img width="239" height="96" alt="retask" src="https://github.com/user-attachments/assets/b3084c5c-ccaf-49a3-8991-94cc57b060b9" />
 
 Next step is tune up our line input to be less noisy yet non-scaling (24-bit ADC output is not altered by codec level scalers). Using `alsamixer`, we carefully tune both `Line Boost` and `Capture` sliders of Capture tab (`F4`) of alsamixer, when check using data flow statistics with [jasmine-sa](https://github.com/twonoise/jasmine-sa) (`F10` then `F1`) to get 24 bit data flow. Mine is `Line Boost`=100 and `Capture`=33. Line input itself can be unconnected when tune up bit depth using `Capture` control; but for set up best _level_ and _SNR_ using `Line Boost` control, it is worth to connect some clean sound to it and estimate SNR using our spectrum analyzer or other measurement.
 
