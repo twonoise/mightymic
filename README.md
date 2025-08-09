@@ -11,7 +11,7 @@ Microphones are _noisy_. That's not a big secret. Very low output amplitude of m
 
 Microphone noise gets way more frustrating if one tries to use some analog or digital **AGC** and/or digital **compressors** to somewhat rectify level variations: they both are considerably increase noise at silent parts of vocal (when noise already most noticeable). While for pure electronic music there is infinite SNR, so no any noise to increase by compressors, but, mic signals are opposite for that, sadly.
 
-Large amount of ways to fight with both types of mentioned noise sources were invented, and they all can be divided to **passive** and **active** approaches (and with rocket priced setups, both are **combined**; we will omit this case here).
+Large amount of ways to fight with both types of mentioned noise sources were invented, and they all can be divided to **passive** and **active** approaches (and with rocket priced setups, both are **combined**; we will omit this case here). Let us also omit here noise gate approaches like DNR from compact cassette epoch, as they and their limitations are well known already.
 
 Active are "simple" (and cheap today), and they are "just" an LNA, placed near capsule, then outputs amplified signal in single-phase or differential form and with low or controlled output impedance. Indeed, there is a power supply required for that, but, most high quality microphone input standards are does not offer power output line. There is another drawback: active circuit adds noise itself, so, there is a balance between added and rejected noise. Also, we do not talk here about added non-linearity distortions, dynamic range limitation, power line collected noise, as these can be eliminated more or less effectively today.
 
@@ -166,6 +166,7 @@ Glossary
 * ADC: Andlog to Digital converter, like _input_ of PC or sound card.
 * AGC: Auto gain control.
 * Mixing: Audio people uses it as (linear) _adding_ but not multiplying.
+* DNR: Dynamic Noise Reduction (Analog noise gate).
 * THD: Total harmonic distortion, most often due to non-linearity. Sum of all IMDx.
 * IMD: Intermodulation distortion. Most important is IMD3 part, because it falls to in-band.
 * TBD: To be displayed.
