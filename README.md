@@ -47,7 +47,11 @@ How it looks using 26x20 mm sized core, 18 mm bobbin width 600:600 Ohm transform
 
 As one can see, there is no more than 4x amplitude gain (when we use `A` & `E` pins). If one need more, then way more expensive custom transformers are need, and this setup will be even more sensitive to output cable capacitance (yes, this is some disadvantage of passive approach, and 150- or even 300-Ohms cables are recommended here, instead of regular 50/75-Ohms ones).
 
-Now we can connect it to some low noise ADC. There is known approach how to reduce ADC noise at the expence of get only half possible sound channels [^1].
+Now we can connect it to some ADC. 
+
+ADCs are _noisy_...
+
+There is known approach how to reduce ADC noise at the expence of get only half possible sound channels [^1].
 We will use same trick, but been even more smart: Mixing stereo to mono, we will not **add**, but **subtract** channels, which, giving us exactly same internal ADC noise power reduction, but, also creates perfect _differential_ input.
 
 > [!Tip]
@@ -65,13 +69,16 @@ At other side, one may note that our schematic use exactly differential output. 
 
 Next step is tune up our line input to be less noisy yet non-scaling (24-bit ADC output is not altered by codec level scalers). Using `alsamixer`, we carefully tune both `Line Boost` and `Capture` sliders of Capture tab (`F4`) of alsamixer, when check using data flow statistics with [jasmine-sa](https://github.com/twonoise/jasmine-sa) (`F10` then `F1`) to get 24 bit data flow. Mine is `Line Boost`=100 and `Capture`=33. Line input itself can be unconnected when tune up bit depth using `Capture` control; but for set up best _level_ and _SNR_ using `Line Boost` control, it is worth to connect some clean sound to it and estimate SNR using our spectrum analyzer or other measurement.
 
-Now it's time to add differential input plugin to our audio plugin host like `Carla`, and one may enjoy lowest possible noise with such a cheap components.
+Now it's time to add differential input plugin to our audio plugin host like `Carla`, and one may enjoy lowest possible _THD+N_ with such a cheap components.
 
 <img width="369" height="119" alt="carla-diff-iama" src="https://github.com/user-attachments/assets/857aab40-cf5e-4671-a204-58b071c68ae0" />
 
      
 <br>
-Well, that works fine. But if mic is fake (output amplitude of capsule is low, or, capsule DC resistance is _too_ hidh for that output), singer can note earlier on later that there is **low dynamic range** of our setup (or, which is same, still low SNR). Are we take all the best our setup offers, or time to think more?
+Well, that works fine!
+
+But if mic is fake (output amplitude of capsule is low, or, capsule DC resistance is _too_ hidh for that output), singer can note earlier on later that there is **low dynamic range** of our setup (or, which is same **(*)**, still low SNR). Are we take all the best our setup offers, or time to think more?
+> **(*)** If we're not reached membrane resonance yet.
 
 Best solution here is, exactly with loudspeakers world, is just to add extra microphone. But it is weird for singer to hangle this setup in hand, so it is "best" electrically only, and quite weird in practice. Another ideas?
 
