@@ -7,7 +7,9 @@ DESCRIPTION
 > [!Note]
 > Decibels used here, are _re: voltage amplitude_.
 
-Microphones are _noisy_. That's not a big secret. Very low output amplitude of most microphone transducers ("capsules") available, means high white noise level added to output signal by the following circuit, as well as high EMI noise on connecting cable.
+Microphones are _noisy_. 
+
+That's not a big secret. Very low output amplitude of most microphone transducers ("capsules") available, means high white noise level added to output signal by the following circuit, as well as high EMI noise on connecting cable.
 
 Microphone noise gets way more frustrating if one tries to use some analog or digital **AGC** and/or digital **compressors** to somewhat rectify level variations: they both are considerably increase noise at silent parts of vocal (when noise already most noticeable). While for pure electronic music there is infinite SNR, so no any noise to increase by compressors, but, mic signals are opposite for that, sadly.
 
@@ -166,6 +168,7 @@ Glossary
 * LPF: Low pass filter.
 * EMI: Electromagnetic interference, cables pickup noise due to it.
 * ADC: Andlog to Digital converter, like _input_ of PC or sound card.
+* ENOB: Effective number of bits, "real" (heavy-loading) ADC/DAC SNR measure, unlike of just silence noise floor.
 * AGC: Auto gain control.
 * Mixing: Audio people uses it as (linear) _adding_ but not multiplying.
 * DNR: Dynamic Noise Reduction (Analog noise gate).
