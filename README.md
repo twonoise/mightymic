@@ -17,18 +17,11 @@ Active are "simple" (and cheap today), and they are "just" an LNA, placed near c
 
 Let's take a look at passive one. Despite of its name, it is a way more expensive, due to it requires high quality wideband transformer. The key parameter of transformer is windings _inductance_. That means either very high magnetic permeability yet wide frequency band core (often impossible to obtain today); or, regular ferrite, but, to keep inductance, it will be very large (at least, way larger than you can find in some microphones). Largest possible size also unavoidable to keep both _resistive_ and _magnetic_ power losses (we have _too_ little power to just lost it!).
 
-> Isn't "Larger size = lower losses" rule wrong and should be opposite?
-
-<!-- Indent seems to be never work, should use workaround. -->
-
-     No. Every electric, electronic, and radio frequency   
-     appliances, are suffered from this. Larger is better  
-     and more effective always. Don't worry if tiny power  
-     from membrane is not enough to drive palm sized  
-     transformer: it will.  
-     Btw, however, there is **not possible** to make cavity  
-     resonators (= filters) for GHz and THz larger than  
-     wavelength allows, sadly (oh, sorry for off-topic).
+>> Isn't "Larger size = lower losses" rule wrong and should be opposite?
+> <!-- Indent seems to be never work, should use workaround. -->
+> No. Every electric, electronic, and radio frequency appliances, are suffered from this. Larger is better and more effective always. Don't worry if tiny power from membrane is not enough to drive palm sized transformer: it will.
+>
+> Btw, however, there is **not possible** to make cavity resonators (= filters) for GHz and THz larger than wavelength allows, sadly (oh, sorry for off-topic).
 
 Well, hopefully, there are two good news:
 1. Typical microphone (let's take regular SM58: it will be fake most probably, anyway we can't obtain correct one) have some space inside of its enclosure;
@@ -70,6 +63,8 @@ At other side, one may note that our schematic use exactly differential output. 
 Next step is tune up our line input to be less noisy yet non-scaling (24-bit ADC output is not altered by codec level scalers). Using `alsamixer`, we carefully tune both `Line Boost` and `Capture` sliders of Capture tab (`F4`) of alsamixer, when check using data flow statistics with [jasmine-sa](https://github.com/twonoise/jasmine-sa) (`F10` then `F1`) to get 24 bit data flow. Mine is `Line Boost`=100 and `Capture`=33. Line input itself can be unconnected when tune up bit depth using `Capture` control; but for set up best _level_ and _SNR_ using `Line Boost` control, it is worth to connect some clean sound to it and estimate SNR using our spectrum analyzer or other measurement.
 
 Now it's time to add differential input plugin to our audio plugin host like `Carla`, and one may enjoy lowest possible _THD+N_ with such a cheap components.
+
+> Low THD+N is important for reverbs, as they have some degrade of SNR. (Example: Simple echo have exactly 3 dB SNR degrade). So it's time to enjoy plenty of air with reverbs.
 
 <img width="369" height="119" alt="carla-diff-iama" src="https://github.com/user-attachments/assets/857aab40-cf5e-4671-a204-58b071c68ae0" />
 
