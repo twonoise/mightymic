@@ -131,6 +131,11 @@ Such approach can be expanded by yet another extra stage for peaks, but we need 
 
 Q & A
 -----
+**Why not just use [^1] at its full power with 4 (two stereo) ADCs?**
+
+It have 3 dB worse EMI noise due to lower signal levels, and like 0.9 to 1.5 dB worse SNR compared to our 4-wire mic plugin, but else it will work.
+
+
 **Can this plugin be made even more strong, with _same_ hardware?**
 
 We let our readers to answer it.
@@ -161,6 +166,10 @@ Both stereo ADCs should form a perfect tandem, in terms of timings (relative ske
 
 Amplitudes mismatch (imperfect `Ratio` value) can create some distortions at the points where gate flip flops. This is mostly fixed with included LPF. Probably, there is automatic calculation of `Ratio` possible, but not easy. It should be like step error detector, integrator, and feedback. It can rectify possible skew also. Ask me if you really need it.
 
+**Are these quite few dB SNR gain really counts?**
+
+If you _found_ this plugin, you _know_ how much every single dB costs, _especially_ at the input of DAW, don't you?
+
 Glossary
 --------
 * LNA: Low noise amplifier.
@@ -174,6 +183,7 @@ Glossary
 * DNR: Dynamic Noise Reduction (Analog noise gate).
 * THD: Total harmonic distortion, most often due to non-linearity. Sum of all IMDx.
 * IMD: Intermodulation distortion. Most important is IMD3 part, because it falls to in-band.
+* DAW: Digital audio workstation, in our case it is realtime DSP chain.
 * TBD: To be displayed.
 * WIP: Work in progress.
 
