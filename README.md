@@ -64,7 +64,7 @@ At other side, one may note that our schematic use exactly differential output. 
 
 Next step is tune up our line input to be less noisy yet non-scaling (24-bit ADC output is not altered by codec level scalers). Using `alsamixer`, we carefully tune both `Line Boost` and `Capture` sliders of Capture tab (`F4`) of alsamixer, when check using data flow statistics with [jasmine-sa](https://github.com/twonoise/jasmine-sa) (`F10` then `F1`) to get 24 bit data flow. Mine is `Line Boost`=100 and `Capture`=33. Line input itself can be unconnected when tune up bit depth using `Capture` control; but for set up best _level_ and _SNR_ using `Line Boost` control, it is worth to connect some clean sound to it and estimate SNR using our spectrum analyzer or other measurement.
 
-Now it's time to add differential input plugin to our audio plugin host like `Carla`, and one may enjoy lowest possible _THD+N_ with such a cheap components.
+Now it's time to add differential input plugin to our audio plugin host like [Carla](https://github.com/twonoise/carla-patches), and one may enjoy lowest possible _THD+N_ with such a cheap components.
 
 > Low THD+N is important for reverbs, as they have some degrade of SNR. (Example: Simple echo have exactly 3 dB SNR degrade). So it's time to enjoy plenty of air with reverbs.
 
@@ -157,7 +157,7 @@ Our setup is highly immune to that. Some differential non-equivalency are easily
 
 **Disadvantages?**
 
-Both stereo ADCs should form a perfect tandem, in terms of timings (relative skew and wander of it), as well as already mentioned amplitude and preamp gain match. (However, it is true for _every_ music work station). It is known that for `JACK` setup and `ALCxxx` codecs, and `alsamixer`, this is true; but your setup can differ, and it is not easy to create test set for it to confirm its ideal behaviour. Hopefully, for voice, some skew is acceptable.
+Both stereo ADCs should form a perfect tandem, in terms of timings (relative skew and wander of it), as well as already mentioned amplitude and preamp gain match. (However, it is true for _every_ music work station). It is known that for `JACK` setup and `ALCxxx` codecs, and `alsamixer`, this is true; but your setup can differ, like "[multi-channel soundcard out of el-cheapo consumer cards](https://www.alsa-project.org/main/index.php/Asoundrc#Virtual_multi_channel_devices)", and it is not easy to create test set for it to confirm its ideal behaviour. Hopefully, for voice, some skew is acceptable.
 
 Amplitudes mismatch (imperfect `Ratio` value) can create some distortions at the points where gate flip flops. This is mostly fixed with included LPF. Probably, there is automatic calculation of `Ratio` possible, but not easy. It should be like step error detector, integrator, and feedback. It can rectify possible skew also. Ask me if you really need it.
 
