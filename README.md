@@ -162,7 +162,7 @@ Our setup is highly immune to that. Some differential non-equivalency are easily
 
 **Disadvantages?**
 
-Both stereo ADCs should form a perfect tandem, in terms of timings (relative skew and wander of it), as well as already mentioned amplitude and preamp gain match. (However, it is true for _every_ music work station). It is known that for `JACK` setup and `ALCxxx` codecs, and `alsamixer`, this is true; but your setup can differ, like "[multi-channel soundcard out of el-cheapo consumer cards](https://www.alsa-project.org/main/index.php/Asoundrc#Virtual_multi_channel_devices)", and it is not easy to create test set for it to confirm its ideal behaviour. Hopefully, for voice, some skew is acceptable.
+Both stereo ADCs should form a perfect tandem, in terms of timings (relative skew and wander of it), as well as already mentioned amplitude and preamp gain match. (However, it is true for _every_ music work station). It is known that for `JACK` setup and `ALCxxx` codecs, and `alsamixer`, this is true; but your setup can differ, like "[multi-channel soundcard out of el-cheapo consumer cards](https://www.alsa-project.org/main/index.php/Asoundrc#Virtual_multi_channel_devices)", and it is not easy to create test set for it to confirm its ideal behaviour. Hopefully, for voice, some skew is acceptable (think about compact cassette tape head misaligned a bit).
 
 Amplitudes mismatch (imperfect `Ratio` value) can create some distortions at the points where gate flip flops. This is mostly fixed with included LPF. Probably, there is automatic calculation of `Ratio` possible, but not easy. It should be like step error detector, integrator, and feedback. It can rectify possible skew also. Ask me if you really need it.
 
