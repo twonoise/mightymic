@@ -53,7 +53,7 @@ process =
   (mux2
     <: _, (notchw(10, 50) : notchw(20, 150) : notchw(35, 250)) :> select2(NOTCH50)
     <: _, (notchw(12, 60) : notchw(25, 180) : notchw(40, 300)) :> select2(NOTCH60)
-    : fi.lowpass(FLT_ORD, AUDIO_BW_HZ) <: _,_) ,
+    : lowpass(FLT_ORD, AUDIO_BW_HZ) <: _,_) ,
   // 2. Thru line (outputs) unbalanced, Straight and Attenuated.
   (_,_) ,
   // How it compiles, but adds extra unused audio ports.
