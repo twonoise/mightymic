@@ -7,6 +7,9 @@ declare license "MIT";
 declare description "4-wire mic frontend. See readme at github.com/twonoise/mightymic.dsp";
 
 import("stdfaust.lib");
+import("filters.lib");
+
+EN4WIRE = checkbox("4 Wire");
 
 // * IMPORTANT! *
 // MUST exactly match attenuation of secondary attenuated output of mic!
@@ -24,12 +27,16 @@ overload(x) = (abs(x) > 0.95);
 
 overloadLed(x) = ba.peakholder(ba.sec2samp(0.25), overload(x));
 
-mux2(x,y) = select2(overload(x), x * RATIO, y);
+mux2(x,y) = select2(select2(EN4WIRE, 0, overload(x)), x * RATIO, y);
 
 // Real ratio meter, works when sounding into mic without overloads.
 // Use it to set Ratio control.
 envelope = abs : max ~ -(0.2/ma.SR);
 ratioMeasured(x,y) = select2(envelope(x) > 0.01, 0, envelope(y) / envelope(x));
+
+// We use notch chains, due to FFT or comb filters will add more delay at low freqs.
+NOTCH50 = checkbox("Notch 50");
+NOTCH60 = checkbox("Notch 60");
 
 // Finally, regular microphone LPF. Anybody sings above 5 kHz?
 AUDIO_BW_HZ = hslider("BW Hz", 2000, 500, 5000, 500);
@@ -43,7 +50,10 @@ process =
   // _,_ <: // Straight and Attenuated: single (UNbalanced) inputs
 
   // 1. Two identical mono outputs
-  (mux2 : fi.lowpass(FLT_ORD, AUDIO_BW_HZ) <: _,_) ,
+  (mux2
+    <: _, (notchw(10, 50) : notchw(20, 150) : notchw(35, 250)) :> select2(NOTCH50)
+    <: _, (notchw(12, 60) : notchw(25, 180) : notchw(40, 300)) :> select2(NOTCH60)
+    : fi.lowpass(FLT_ORD, AUDIO_BW_HZ) <: _,_) ,
   // 2. Thru line (outputs) unbalanced, Straight and Attenuated.
   (_,_) ,
   // How it compiles, but adds extra unused audio ports.
