@@ -38,9 +38,11 @@ ratioMeasured(x,y) = select2(envelope(x) > 0.01, 0, envelope(y) / envelope(x));
 NOTCH50 = checkbox("Notch 50");
 NOTCH60 = checkbox("Notch 60");
 
-// Finally, regular microphone LPF. Anybody sings above 5 kHz?
-AUDIO_BW_HZ = hslider("BW Hz", 2000, 500, 5000, 500);
+// Finally, regular microphone LPF.
+AUDIO_BW_HZ = hslider("BW Hz", 2000, 500, 20000, 500);
 FLT_ORD = 3;
+
+OUTPUTLEVEL = hslider("Output Level", 1.0, 0, 5.0, 0.1);
 
 process =
   (_,_ : diff),   // Straight differential (balanced) inputs
@@ -50,10 +52,13 @@ process =
   // _,_ <: // Straight and Attenuated: single (UNbalanced) inputs
 
   // 1. Two identical mono outputs
-  (mux2
+  (
+    mux2
     <: _, (notchw(10, 50) : notchw(20, 150) : notchw(35, 250)) :> select2(NOTCH50)
     <: _, (notchw(12, 60) : notchw(25, 180) : notchw(40, 300)) :> select2(NOTCH60)
-    : lowpass(FLT_ORD, AUDIO_BW_HZ) <: _,_) ,
+    : lowpass(FLT_ORD, AUDIO_BW_HZ)
+    * OUTPUTLEVEL <: _,_
+  ) ,
   // 2. Thru line (outputs) unbalanced, Straight and Attenuated.
   (_,_) ,
   // How it compiles, but adds extra unused audio ports.
