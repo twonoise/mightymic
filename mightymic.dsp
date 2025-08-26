@@ -48,7 +48,7 @@ ratioMeasured(x,y) = select2(envelope(x) > 0.01, 0, envelope(y) / envelope(x));
 /* Various post processing with per-section On-Off switches */
 
 // Mains frequency is compile-time value.
-MAINSFREQIDEAL = 60; // 60 or 50, or 400 sometimes
+MAINSFREQIDEAL = 50; // 60 or 50, or 400 sometimes
 
 // S is samples q'ty for delay, ma.SR is current sample rate (internal func).
 // Note that for all 60 & 50 Hz & 44.1 & 48 kS/s multiplies combinations, there is integer division; while for like 16 or 22.5 kS/s, 60 Hz will give some offset.
@@ -65,7 +65,7 @@ notch3 = _ <: _, (
 ) :> select2(checkbox("[3] Notch Three"));
 
 // IIR Comb filter is for all harmonics.
-// Nobody knows how it works! Despite of its tiny look, it is result of long and massive blind trials and errors. Long story short, i am try to make it according to theory [1]. It is essential that we do not need just comb filter which is just (x - x_delayed). Rather, we need it to have Q factor. The difference is narrow notches, note picture at [1]. But problem is what to do with "b" "multiplier" (see H(z)=... at [1]). The transformation (2)->(3) (transfer "function" to Faust-compatible form) as per [2], is not known with "multiplier" in transfer "function". However, happily, it have Q > 1 now. FIXME someone else, please! DSP students welcome.
+// Nobody knows how it works! Despite of its tiny look, it is result of long and massive blind trials and errors. Long story short, i am try to make it according to theory [1]. It is essential that we do not need just comb filter which is just (x - x_delayed). Rather, we need it to have Q factor. The difference is narrow notches, note picture at [1]. But problem is what to do with "b" "multiplier" (see H(z)=... at [1]). The transformation (2)->(3) (transfer "function" to Faust-compatible form) as per [2], is not known with "multiplier" in transfer "function". However, happily, we have Q > 1 now. FIXME someone else, please! DSP students welcome.
 // [1] https://www.mathworks.com/help/dsp/ref/iircomb.html
 // [2] page 3 (315) at https://cdn.intechopen.com/pdfs/17794/InTech-Adaptive_harmonic_iir_notch_filters_for_frequency_estimation_and_tracking.pdf
 // [3] Fig. 2.27 from https://www.dsprelated.com/freebooks/pasp/Comb_Filters.html
@@ -87,8 +87,7 @@ tilt = _ <: _,
 :> select2(checkbox("[9] Tilt"));
 
 // Robot voice, as per request, but it's strange, no real use i think.
-// Thanks to https://github.com/LucaSpanedda/Digital_Reverberation_in_Faust
-fbcf(del, g, x) = loop ~ _ with { loop(y) = x + y@(del - 1) * g; };
+fbcf(del, g, x) = loop ~ _ with { loop(y) = x + y@(del - 1) * g; }; // Thanks to https://github.com/LucaSpanedda/Digital_Reverberation_in_Faust
 robot = _ <: _,
   fbcf(nentry("[C] Robot Size", 5000, 1000, 10000, 100) : int, 0.9)
 :> select2(checkbox("[B] Robot"));
@@ -116,7 +115,7 @@ process =
     : tilt
     : robot
     : lowpass(FLT_ORD, AUDIO_BW_HZ)
-    * OUTPUTLEVEL <: _,_ // _, (spectral_tilt_demo(3) : _)
+    * OUTPUTLEVEL <: _,_
   ) ,
   // 2. Thru line (outputs) unbalanced, Straight and Attenuated.
   (_,_) ,
