@@ -129,6 +129,11 @@ Btw, why these 3 dB, if no peaks, just normal underloaded input? This is because
 
 Such approach can be expanded by yet another extra stage for peaks, but we need 3rd stereo ADC and extra wiring (while DIN-7 connector and our transformers already allows it).
 
+Post processing
+---------------
+
+We have some extra filters, with bypass switch for each. Will work with both normal and 4-wire microphones. It's worth to check `.dsp` source code for descriptions. Full instruction manual is WIP, due to final filters set is not settled yet.
+
 Q & A
 -----
 **Why not just use [^1] at its full power with 4 (two stereo) ADCs?**
