@@ -8,7 +8,6 @@ declare description "4-wire mic frontend. See readme at github.com/twonoise/migh
 
 import("stdfaust.lib");
 import("filters.lib");
-import("music.lib");
 
 
 /* Differential inputs section */
@@ -51,11 +50,11 @@ ratioMeasured(x,y) = select2(envelope(x) > 0.01, 0, envelope(y) / envelope(x));
 // Mains frequency is compile-time value.
 MAINSFREQIDEAL = 60; // 60 or 50, or 400 sometimes
 
-// S is samples q'ty for delay, SR is current sample rate (internal func).
+// S is samples q'ty for delay, ma.SR is current sample rate (internal func).
 // Note that for all 60 & 50 Hz & 44.1 & 48 kS/s multiplies combinations, there is integer division; while for like 16 or 22.5 kS/s, 60 Hz will give some offset.
-S = abs(round(SR / MAINSFREQIDEAL - nentry("[5] Mains Detune", 0, -5, 5, 1)));
+S = abs(round(ma.SR / MAINSFREQIDEAL - nentry("[5] Mains Detune", 0, -5, 5, 1)));
 
-MAINSFREQ = SR / S : vbargraph("[6] Mains Freq", 0, 1000);
+MAINSFREQ = ma.SR / S : vbargraph("[6] Mains Freq", 0, 1000);
 
 // Notch chains for first three harmonics.
 // NOTE It works, but adds few metal ghosts.
@@ -69,26 +68,36 @@ notch3 = _ <: _, (
 // Nobody knows how it works! Despite of its tiny look, it is result of long and massive blind trials and errors. Long story short, i am try to make it according to theory [1]. It is essential that we do not need just comb filter which is just (x - x_delayed). Rather, we need it to have Q factor. The difference is narrow notches, note picture at [1]. But problem is what to do with "b" "multiplier" (see H(z)=... at [1]). The transformation (2)->(3) (transfer "function" to Faust-compatible form) as per [2], is not known with "multiplier" in transfer "function". However, happily, it have Q > 1 now. FIXME someone else, please! DSP students welcome.
 // [1] https://www.mathworks.com/help/dsp/ref/iircomb.html
 // [2] page 3 (315) at https://cdn.intechopen.com/pdfs/17794/InTech-Adaptive_harmonic_iir_notch_filters_for_frequency_estimation_and_tracking.pdf
+// [3] Fig. 2.27 from https://www.dsprelated.com/freebooks/pasp/Comb_Filters.html
 iircombnotch(x) = kernel ~ _ with { kernel(y) = 1.0*x - 1.0*x@(S) - (0.5*y - 0.5*y@(S)); };
 notchcomb = _ <: _, iircombnotch :> select2(checkbox("[4] Notch Comb"));
 
+// LM1894 DNR
+envelopeFastLimited = abs : min(1.0) : max ~ -(2.0/ma.SR) ; // Max = 1.0
+sensitivity = hslider("[8] LM1894 Sens.", 0.1, 0, 1, 0.01);
+bw(x) = 1000 + 19000 * (envelopeFastLimited(x * sensitivity * 10.0));
+lm1894(x) = lowpass(FLT_ORD, bw(x));
+dnr = _ <: _,
+  lm1894
+:> select2(checkbox("[7] LM1894"));
+
 // Spectral tilt to rectify microphone frequency responce a bit
 tilt = _ <: _,
-  spectral_tilt(3, 20, 10000, nentry("[8] Tilt dB/Oct", 0, -6, 6, 1) : int / 6.0)
-:> select2(checkbox("[7] Tilt"));
+  spectral_tilt(3, 20, 10000, nentry("[A] Tilt dB/Oct", 0, -6, 6, 1) : int / 6.0)
+:> select2(checkbox("[9] Tilt"));
 
-// Robot voice, as per request.
+// Robot voice, as per request, but it's strange, no real use i think.
 // Thanks to https://github.com/LucaSpanedda/Digital_Reverberation_in_Faust
 fbcf(del, g, x) = loop ~ _ with { loop(y) = x + y@(del - 1) * g; };
 robot = _ <: _,
-  fbcf(nentry("[A] Robot Size", 5000, 1000, 10000, 100) : int, 0.9)
-:> select2(checkbox("[9] Robot"));
+  fbcf(nentry("[C] Robot Size", 5000, 1000, 10000, 100) : int, 0.9)
+:> select2(checkbox("[B] Robot"));
 
 // Finally, regular microphone LPF.
-AUDIO_BW_HZ = hslider("[B] BW Hz", 20000, 500, 20000, 500);
+AUDIO_BW_HZ = hslider("[D] BW Hz", 20000, 500, 20000, 500);
 FLT_ORD = 3;
 
-OUTPUTLEVEL = hslider("[E] Output Level", 1.0, 0, 5.0, 0.1);
+OUTPUTLEVEL = hslider("[G] Output Level", 1.0, 0, 5.0, 0.1);
 
 
 process =
@@ -100,9 +109,10 @@ process =
 
   // 1. Two identical mono outputs
   (
-    micout
-    : notch3
+    micout        // This one have two inputs and mono output;
+    : notch3      // The following all are mono.
     : notchcomb
+    : dnr
     : tilt
     : robot
     : lowpass(FLT_ORD, AUDIO_BW_HZ)
@@ -113,8 +123,8 @@ process =
   // How it compiles, but adds extra unused audio ports.
   // 3. LEDS, with unneeded outputs.
   //    Rename to UNUSED also included in command above as a workaround.
-  ( (overloadLed : int : vbargraph("[C] Overload0 [CV:0]", 0, 1)),
-    (overloadLed : int : vbargraph("[D] Overload1 [CV:1]", 0, 1)) )
+  ( (overloadLed : int : vbargraph("[E] Overload0 [CV:0]", 0, 1)),
+    (overloadLed : int : vbargraph("[F] Overload1 [CV:1]", 0, 1)) )
   // (3). How it should be: but lost LED ports.
   // ((overloadLed : int : vbargraph("Overload0 [CV:0]", 0, 1) : !),
   //  (overloadLed : int : vbargraph("Overload1 [CV:1]", 0, 1) : !) )
