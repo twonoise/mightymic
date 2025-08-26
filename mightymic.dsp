@@ -65,6 +65,9 @@ notch3 = _ <: _, (
 ) :> select2(checkbox("[3] Notch Three"));
 
 // IIR Comb filter is for all harmonics.
+// Nobody knows how it works! Despite of its tiny look, it is result of long and massive blind trials and errors. Long story short, i am try to make it according to theory [1]. It is essential that we do not need just comb filter which is just (x - x_delayed). Rather, we need it to have Q factor. The difference is narrow notches, note picture at [1]. But problem is what to do with "b" "multiplier" (see H(z)=... at [1]). The transformation (2)->(3) (transfer "function" to Faust-compatible form) as per [2], is not known with "multiplier" in transfer "function". FIXME someone else, please! DSP students welcome.
+// [1] https://www.mathworks.com/help/dsp/ref/iircomb.html
+// [2] page 3 (315) at https://cdn.intechopen.com/pdfs/17794/InTech-Adaptive_harmonic_iir_notch_filters_for_frequency_estimation_and_tracking.pdf
 iircombnotch(x) = kernel ~ _ with { kernel(y) = 1.0*x - 1.0*x@(S) - (0.5*y - 0.5*y@(S)); };
 notchcomb = _ <: _, iircombnotch :> select2(checkbox("[4] Notch Comb"));
 
