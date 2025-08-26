@@ -133,6 +133,9 @@ Post processing
 ---------------
 
 We have some extra filters, with bypass switch for each. Will work with both normal and 4-wire microphones. It's worth to check `.dsp` source code for descriptions. Full instruction manual is WIP, due to final filters set is not settled yet.
+<img width="1172" height="94" alt="mightymic" src="https://github.com/user-attachments/assets/36e69d14-08a7-4e3c-a1f5-12333f3ccb44" />
+
+
 
 Q & A
 -----
