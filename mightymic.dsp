@@ -48,7 +48,7 @@ ratioMeasured(x,y) = select2(envelope(x) > 0.01, 0, envelope(y) / envelope(x));
 /* Various post processing with per-section On-Off switches */
 
 // Mains frequency is compile-time value.
-MAINSFREQIDEAL = 50; // 60 or 50, or 400 sometimes
+MAINSFREQIDEAL = 60; // 60 or 50, or 400 sometimes
 
 // S is samples q'ty for delay, ma.SR is current sample rate (internal func).
 // Note that for all 60 & 50 Hz & 44.1 & 48 kS/s multiplies combinations, there is integer division; while for like 16 or 22.5 kS/s, 60 Hz will give some offset.
