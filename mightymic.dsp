@@ -8,16 +8,23 @@ declare description "4-wire mic frontend. See readme at github.com/twonoise/migh
 
 import("stdfaust.lib");
 import("filters.lib");
+import("music.lib");
 
-EN4WIRE = checkbox("4 Wire");
 
-// * IMPORTANT! *
+/* Differential inputs section */
+
+diff(x,y) = (x - y) / 2;
+
+
+/* 4 wire section */
+
+EN4WIRE = checkbox("[0] 4 Wire");
+
+// IMPORTANT!
 // MUST exactly match attenuation of secondary attenuated output of mic!
 // Often it is turns ratio of attenuated to straight windings output.
 // Most often it is 0.5 (attenuated is half of whole winding).
-RATIO = hslider("Ratio", 0.5, 0.1, 0.9, 0.001);
-
-diff(x,y) = (x - y) / 2;
+RATIO = hslider("[1] Ratio", 0.5, 0.1, 0.9, 0.001);
 
 // We need not single point but some transition band, if some
 // compression is possible near range limit of ADCs; or, we lower
@@ -27,22 +34,51 @@ overload(x) = (abs(x) > 0.95);
 
 overloadLed(x) = ba.peakholder(ba.sec2samp(0.25), overload(x));
 
-mux2(x,y) = select2(select2(EN4WIRE, 0, overload(x)), x * RATIO, y);
+mux2(x,y) = select2(overload(x), x * RATIO, y);
 
-// Real ratio meter, works when sounding into mic without overloads.
+micout(x,y) = select2(EN4WIRE, x, mux2(x,y));
+
+/* Metering helper subsection */
+
+// Real ratio meter, works when sounding into 4-wire mic without overloads.
 // Use it to set Ratio control.
 envelope = abs : max ~ -(0.2/ma.SR);
 ratioMeasured(x,y) = select2(envelope(x) > 0.01, 0, envelope(y) / envelope(x));
 
-// We use notch chains, due to FFT or comb filters will add more delay at low freqs.
-NOTCH50 = checkbox("Notch 50");
-NOTCH60 = checkbox("Notch 60");
+
+/* Various post processing with per-section On-Off switches */
+
+// Mains frequency is compile-time value.
+MAINSFREQIDEAL = 60; // 60 or 50, or 400 sometimes
+
+// S is samples q'ty for delay, SR is current sample rate (internal func).
+// Note that for all 60 & 50 Hz & 44.1 & 48 kS/s multiplies combinations, there is integer division; while for like 16 or 22.5 kS/s, 60 Hz will give some offset.
+S = abs(round(SR / MAINSFREQIDEAL + nentry("[5] Mains Freq Detune", 0, -5, 5, 1)));
+
+MAINSFREQ = SR / S : vbargraph("[6] Mains Freq", 0, 1000);
+
+// Notch chains for first three harmonics.
+notch3 = _ <: _, (
+  notchw(MAINSFREQ * 1.0 * 0.2,  MAINSFREQ * 1.0) :
+  notchw(MAINSFREQ * 3.0 * 0.15, MAINSFREQ * 3.0) :
+  notchw(MAINSFREQ * 5.0 * 0.1,  MAINSFREQ * 5.0)
+) :> select2(checkbox("[3] Notch Three"));
+
+// IIR Comb filter is for all harmonics.
+iircombnotch(x) = kernel ~ _ with { kernel(y) = 1.0*x - 1.0*x@(S) - (0.5*y - 0.5*y@(S)); };
+notchcomb = _ <: _, iircombnotch :> select2(checkbox("[4] Notch Comb"));
+
+// Spectral tilt to rectify microphone frequency responce a bit
+tilt = _ <: _,
+  spectral_tilt(3, 20, 10000, nentry("[8] Tilt dB/Oct", 0, -6, 6, 1) : int / 6.0)
+:> select2(checkbox("[7] Tilt"));
 
 // Finally, regular microphone LPF.
-AUDIO_BW_HZ = hslider("BW Hz", 2000, 500, 20000, 500);
+AUDIO_BW_HZ = hslider("[9] BW Hz", 20000, 500, 20000, 500);
 FLT_ORD = 3;
 
-OUTPUTLEVEL = hslider("Output Level", 1.0, 0, 5.0, 0.1);
+OUTPUTLEVEL = hslider("[C] Output Level", 1.0, 0, 5.0, 0.1);
+
 
 process =
   (_,_ : diff),   // Straight differential (balanced) inputs
@@ -53,23 +89,24 @@ process =
 
   // 1. Two identical mono outputs
   (
-    mux2
-    <: _, (notchw(10, 50) : notchw(20, 150) : notchw(35, 250)) :> select2(NOTCH50)
-    <: _, (notchw(12, 60) : notchw(25, 180) : notchw(40, 300)) :> select2(NOTCH60)
+    micout
+    : notch3
+    : notchcomb
+    : tilt
     : lowpass(FLT_ORD, AUDIO_BW_HZ)
-    * OUTPUTLEVEL <: _,_
+    * OUTPUTLEVEL <: _,_ // _, (spectral_tilt_demo(3) : _)
   ) ,
   // 2. Thru line (outputs) unbalanced, Straight and Attenuated.
   (_,_) ,
   // How it compiles, but adds extra unused audio ports.
   // 3. LEDS, with unneeded outputs.
   //    Rename to UNUSED also included in command above as a workaround.
-  ( (overloadLed : int : vbargraph("Overload0 [CV:0]", 0, 1)),
-    (overloadLed : int : vbargraph("Overload1 [CV:1]", 0, 1)) )
+  ( (overloadLed : int : vbargraph("[A] Overload0 [CV:0]", 0, 1)),
+    (overloadLed : int : vbargraph("[B] Overload1 [CV:1]", 0, 1)) )
   // (3). How it should be: but lost LED ports.
   // ((overloadLed : int : vbargraph("Overload0 [CV:0]", 0, 1) : !),
   //  (overloadLed : int : vbargraph("Overload1 [CV:1]", 0, 1) : !) )
 
   // 4. Ratio measured display output.
-  , (ratioMeasured : vbargraph("Ratio Meter [CV:2]", 0, 1))
+  , (ratioMeasured : vbargraph("[2] Ratio Meter [CV:2]", 0, 1))
 ;
