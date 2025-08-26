@@ -53,11 +53,12 @@ MAINSFREQIDEAL = 60; // 60 or 50, or 400 sometimes
 
 // S is samples q'ty for delay, SR is current sample rate (internal func).
 // Note that for all 60 & 50 Hz & 44.1 & 48 kS/s multiplies combinations, there is integer division; while for like 16 or 22.5 kS/s, 60 Hz will give some offset.
-S = abs(round(SR / MAINSFREQIDEAL + nentry("[5] Mains Freq Detune", 0, -5, 5, 1)));
+S = abs(round(SR / MAINSFREQIDEAL - nentry("[5] Mains Detune", 0, -5, 5, 1)));
 
 MAINSFREQ = SR / S : vbargraph("[6] Mains Freq", 0, 1000);
 
 // Notch chains for first three harmonics.
+// NOTE It works, but adds few metal ghosts.
 notch3 = _ <: _, (
   notchw(MAINSFREQ * 1.0 * 0.2,  MAINSFREQ * 1.0) :
   notchw(MAINSFREQ * 3.0 * 0.15, MAINSFREQ * 3.0) :
@@ -76,11 +77,18 @@ tilt = _ <: _,
   spectral_tilt(3, 20, 10000, nentry("[8] Tilt dB/Oct", 0, -6, 6, 1) : int / 6.0)
 :> select2(checkbox("[7] Tilt"));
 
+// Robot voice, as per request.
+// Thanks to https://github.com/LucaSpanedda/Digital_Reverberation_in_Faust
+fbcf(del, g, x) = loop ~ _ with { loop(y) = x + y@(del - 1) * g; };
+robot = _ <: _,
+  fbcf(nentry("[A] Robot Size", 5000, 1000, 10000, 100) : int, 0.9)
+:> select2(checkbox("[9] Robot"));
+
 // Finally, regular microphone LPF.
-AUDIO_BW_HZ = hslider("[9] BW Hz", 20000, 500, 20000, 500);
+AUDIO_BW_HZ = hslider("[B] BW Hz", 20000, 500, 20000, 500);
 FLT_ORD = 3;
 
-OUTPUTLEVEL = hslider("[C] Output Level", 1.0, 0, 5.0, 0.1);
+OUTPUTLEVEL = hslider("[E] Output Level", 1.0, 0, 5.0, 0.1);
 
 
 process =
@@ -96,6 +104,7 @@ process =
     : notch3
     : notchcomb
     : tilt
+    : robot
     : lowpass(FLT_ORD, AUDIO_BW_HZ)
     * OUTPUTLEVEL <: _,_ // _, (spectral_tilt_demo(3) : _)
   ) ,
@@ -104,8 +113,8 @@ process =
   // How it compiles, but adds extra unused audio ports.
   // 3. LEDS, with unneeded outputs.
   //    Rename to UNUSED also included in command above as a workaround.
-  ( (overloadLed : int : vbargraph("[A] Overload0 [CV:0]", 0, 1)),
-    (overloadLed : int : vbargraph("[B] Overload1 [CV:1]", 0, 1)) )
+  ( (overloadLed : int : vbargraph("[C] Overload0 [CV:0]", 0, 1)),
+    (overloadLed : int : vbargraph("[D] Overload1 [CV:1]", 0, 1)) )
   // (3). How it should be: but lost LED ports.
   // ((overloadLed : int : vbargraph("Overload0 [CV:0]", 0, 1) : !),
   //  (overloadLed : int : vbargraph("Overload1 [CV:1]", 0, 1) : !) )
