@@ -136,7 +136,7 @@ We have added some extra filters recently, together with bypass switch for each.
 
 Please let me know how you like new mains hum remover, especially if you have noisy (distorted) mains lines around. Note that we have run time fine-tuned mains frequency to reject. Base frequency value is changed at `.dsp` file.
 
-<img width="1172" height="94" alt="mightymic" src="https://github.com/user-attachments/assets/36e69d14-08a7-4e3c-a1f5-12333f3ccb44" />
+<img width="936" height="146" alt="mightymic" src="https://github.com/user-attachments/assets/b876dd52-d3f9-4147-bb09-36328d8170ac" />
 
 Note that **Notch** control is three-position, and have _scalepoints_ which describe current one. With **Carla**, value can be seen as tooltip during pressing `Spacebar` on mouse hover, or using mouse button. Or, use _Set value..._ (`E` on hover).
 
