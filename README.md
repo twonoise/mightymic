@@ -143,10 +143,13 @@ Note that **Notch** control is three-position, and have _scalepoints_ which desc
 
 Q & A
 -----
-**Why not just use [^1] at its full power with 4 (two stereo) ADCs?**
+**Why not just use [^1] at its full power, with regilar 2-wire mic and 4 (two stereo) ADCs?**
 
 It have 3 dB worse EMI noise due to lower signal levels, and like 0.9 to 1.5 dB worse SNR compared to our 4-wire mic plugin, but else it will work.
 
+**Same, yet use one of stereo ADCs at 1/2 level? Would give all the benefits, yet with 2-wire.**
+
+This one is closer. The problem is input capacitance of ADCs (and wiring). The 4-wire is best possible approach in terms of distributing our tiny power to system capacitances, but that does not mean others are not useful. It's worth to try, especially with our new spectral tilt correction (but amplifying high freq components also amplifies noise...).
 
 **Can this plugin be made even more strong, with _same_ hardware?**
 
