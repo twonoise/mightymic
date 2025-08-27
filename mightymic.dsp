@@ -1,4 +1,5 @@
-// faust2lv2 mightymic.dsp  &&  sed -i -e 's/in0/In/g' -e 's/in1/InInv/g' -e 's/in2/InPeak/g' -e 's/in3/InPeakInv/g' -e 's/out0/Out0/g' -e 's/out1/Out1/g' -e 's/out2/Thru/g' -e 's/out3/ThruPeak/g' -e 's/out4/UNUSED0/g' -e 's/out5/UNUSED1/g' -e 's/out6/UNUSED2/g' -e '/lv2:name "Overload/a\\tlv2:portProperty lv2:integer ;' mightymic.lv2/mightymic.ttl  &&  cp -R ./mightymic.lv2/ /usr/local/lib/lv2/
+// faust2lv2 mightymic.dsp  &&  sed -i -e 's/in0/In/g' -e 's/in1/InInv/g' -e 's/in2/InPeak/g' -e 's/in3/InPeakInv/g' -e 's/out0/Out0/g' -e 's/out1/Out1/g' -e 's/out2/Thru/g' -e 's/out3/ThruPeak/g' -e 's/out4/UNUSED0/g' -e 's/out5/UNUSED1/g' -e 's/out6/UNUSED2/g' -e '/lv2:name "Overload/a\\tlv2:portProperty lv2:integer ;' -e '/lv2:name "Notch/a\\tlv2:portProperty lv2:integer ;\n\tlv2:scalePoint [ rdfs:label "Off"; rdf:value 0 ] ;\n\tlv2:scalePoint [ rdfs:label "Three"; rdf:value 1 ] ;\n\tlv2:scalePoint [ rdfs:label "Comb"; rdf:value 2 ] ;' mightymic.lv2/mightymic.ttl  &&  cp -R ./mightymic.lv2/ /usr/local/lib/lv2/
+
 
 declare name "MightyMic"; // No spaces for better JACK port names.
 declare version "2025";
@@ -58,11 +59,11 @@ MAINSFREQ = ma.SR / S : vbargraph("[6] Mains Freq", 0, 1000);
 
 // Notch chains for first three harmonics.
 // NOTE It works, but adds few metal ghosts.
-notch3 = _ <: _, (
+// FIXME To be replaced w/ halfcomb to reject odd only, see [3] below.
+notch3 =
   notchw(MAINSFREQ * 1.0 * 0.2,  MAINSFREQ * 1.0) :
   notchw(MAINSFREQ * 3.0 * 0.15, MAINSFREQ * 3.0) :
-  notchw(MAINSFREQ * 5.0 * 0.1,  MAINSFREQ * 5.0)
-) :> select2(checkbox("[3] Notch Three"));
+  notchw(MAINSFREQ * 5.0 * 0.1,  MAINSFREQ * 5.0);
 
 // IIR Comb filter is for all harmonics.
 // Nobody knows how it works! Despite of its tiny look, it is result of long and massive blind trials and errors. Long story short, i am try to make it according to theory [1]. It is essential that we do not need just comb filter which is just (x - x_delayed). Rather, we need it to have Q factor. The difference is narrow notches, note picture at [1]. But problem is what to do with "b" "multiplier" (see H(z)=... at [1]). The transformation (2)->(3) (transfer "function" to Faust-compatible form) as per [2], is not known with "multiplier" in transfer "function". However, happily, we have Q > 1 now. FIXME someone else, please! DSP students welcome.
@@ -70,7 +71,9 @@ notch3 = _ <: _, (
 // [2] page 3 (315) at https://cdn.intechopen.com/pdfs/17794/InTech-Adaptive_harmonic_iir_notch_filters_for_frequency_estimation_and_tracking.pdf
 // [3] Fig. 2.27 from https://www.dsprelated.com/freebooks/pasp/Comb_Filters.html
 iircombnotch(x) = kernel ~ _ with { kernel(y) = 1.0*x - 1.0*x@(S) - (0.5*y - 0.5*y@(S)); };
-notchcomb = _ <: _, iircombnotch :> select2(checkbox("[4] Notch Comb"));
+
+// Three-way selector: 0=bypass, 1=notch3, 2=iircombnotch
+notch = _ <: _, notch3, iircombnotch :> select3(int(nentry("[4] [integer] Notch", 0, 0, 2, 1)));
 
 // LM1894 DNR
 envelopeFastLimited = abs : min(1.0) : max ~ -(2.0/ma.SR) ; // Max = 1.0
@@ -109,8 +112,7 @@ process =
   // 1. Two identical mono outputs
   (
     micout        // This one have two inputs and mono output;
-    : notch3      // The following all are mono.
-    : notchcomb
+    : notch       // The following all are mono.
     : dnr
     : tilt
     : robot
