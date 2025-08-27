@@ -1,11 +1,11 @@
-// faust2lv2 mightymic.dsp  &&  sed -i -e 's/in0/In/g' -e 's/in1/InInv/g' -e 's/in2/InPeak/g' -e 's/in3/InPeakInv/g' -e 's/out0/Out0/g' -e 's/out1/Out1/g' -e 's/out2/Thru/g' -e 's/out3/ThruPeak/g' -e 's/out4/UNUSED0/g' -e 's/out5/UNUSED1/g' -e 's/out6/UNUSED2/g' -e '/lv2:name "Overload/a\\tlv2:portProperty lv2:integer ;' -e '/lv2:name "Notch/a\\tlv2:portProperty lv2:integer ;\n\tlv2:scalePoint [ rdfs:label "Off"; rdf:value 0 ] ;\n\tlv2:scalePoint [ rdfs:label "Three"; rdf:value 1 ] ;\n\tlv2:scalePoint [ rdfs:label "Comb"; rdf:value 2 ] ;' mightymic.lv2/mightymic.ttl  &&  cp -R ./mightymic.lv2/ /usr/local/lib/lv2/
+// faust2lv2 mightymic.dsp  &&  sed -i -e 's/in0/In/g' -e 's/in1/InInv/g' -e 's/in2/InPeak/g' -e 's/in3/InPeakInv/g' -e 's/out0/Out0/g' -e 's/out1/Out1/g' -e 's/out2/Thru/g' -e 's/out3/ThruPeak/g' -e 's/out4/UNUSED0/g' -e 's/out5/UNUSED1/g' -e 's/out6/UNUSED2/g' -e '/lv2:name "Overload/a\\tlv2:portProperty lv2:integer ;' -e '/lv2:name "Mains D/a\\tlv2:portProperty lv2:integer ;' -e '/lv2:name "Notch/a\\tlv2:portProperty lv2:integer ;\n\tlv2:scalePoint [ rdfs:label "Off"; rdf:value 0 ] ;\n\tlv2:scalePoint [ rdfs:label "Three"; rdf:value 1 ] ;\n\tlv2:scalePoint [ rdfs:label "Comb"; rdf:value 2 ] ;' mightymic.lv2/mightymic.ttl  &&  cp -R ./mightymic.lv2/ /usr/local/lib/lv2/
 
 
 declare name "MightyMic"; // No spaces for better JACK port names.
 declare version "2025";
 declare author "jpka";
 declare license "MIT";
-declare description "4-wire mic frontend. See readme at github.com/twonoise/mightymic.dsp";
+declare description "2 & 4-wire mic frontend. See readme at github.com/twonoise/mightymic";
 
 import("stdfaust.lib");
 import("filters.lib");
@@ -73,7 +73,7 @@ notch3 =
 iircombnotch(x) = kernel ~ _ with { kernel(y) = 1.0*x - 1.0*x@(S) - (0.5*y - 0.5*y@(S)); };
 
 // Three-way selector: 0=bypass, 1=notch3, 2=iircombnotch
-notch = _ <: _, notch3, iircombnotch :> select3(int(nentry("[4] [integer] Notch", 0, 0, 2, 1)));
+notch = _ <: _, notch3, iircombnotch :> select3(int(nentry("[4] Notch", 0, 0, 2, 1)));
 
 // LM1894 DNR
 envelopeFastLimited = abs : min(1.0) : max ~ -(2.0/ma.SR) ; // Max = 1.0
