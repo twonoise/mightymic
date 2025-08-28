@@ -136,10 +136,9 @@ We have added some extra filters recently, together with bypass switch for each.
 
 Please let me know how you like new mains hum remover, especially if you have noisy (distorted) mains lines around. Note that we have run time fine-tuned mains frequency to reject. Base frequency value is changed at `.dsp` file.
 
-<img width="1500" height="225" alt="mightymic" src="https://github.com/user-attachments/assets/4368b703-12be-45d8-8983-c80a984ef4a3" />
+<img width="1494" height="216" alt="mightymic" src="https://github.com/user-attachments/assets/69ae37c9-2b02-47ee-bc84-a6bb05bcb05f" />
 
 Note that **Notch** control is three-position, and have _scalepoints_ which describe current one. With **Carla**, value can be seen as tooltip during pressing `Spacebar` on mouse hover, or using mouse button. Or, use _Set value..._ (`E` on hover).
-
 
 Q & A
 -----
@@ -174,6 +173,10 @@ Here is triple effect on SNR:
 **What if windings (and/or taps) are not perfectly balanced?**
 
 Our setup is highly immune to that. Some differential non-equivalency are easily rejected by definition of differential signals. Non-symmetric taps measured & agjusted using `Ratio` knob & scale.
+
+**Electric guitars?**
+
+Any analog input welcome! But if it is _UNbalanced_ (Tip-Ring, or TS connector, like most electric guitars), you'll need to recompile, search for `UNbalanced` at code. Please leave your feedback!
 
 **Disadvantages?**
 
