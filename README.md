@@ -150,6 +150,8 @@ It have 3 dB worse EMI noise due to lower signal levels, and like 0.9 to 1.5 dB 
 
 This one is closer. The problem is input capacitance of ADCs (and wiring). The 4-wire is best possible approach in terms of distributing our tiny power to system capacitances, but that does not mean others are not useful. It's worth to try, especially with our new spectral tilt correction (but amplifying high freq components also amplifies noise...).
 
+Btw, system input capacitance is limiting factor for transformer gain: As it replicated backwards to the membrane capacitive load at same ratio as transformer winding ratio, so, the more ratio, the more spectral slope fall of high frequencies. More windings also can give high _self_ capacitance (time to increase core size).
+
 **Can this plugin be made even more strong, with _same_ hardware?**
 
 We let our readers to answer it.
