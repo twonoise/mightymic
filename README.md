@@ -15,7 +15,7 @@ Microphone noise gets way more frustrating if one tries to use some analog or di
 
 Large amount of ways to fight with both types of mentioned noise sources were invented, and they all can be divided to **passive** and **active** approaches (and with rocket priced setups, both are **combined**; we will omit this case here). Let us also omit here noise gate approaches like DNR from compact cassette epoch, as they and their limitations are well known already.
 
-Active are "simple" (and cheap today), and they are "just" an LNA, placed near capsule, then outputs amplified signal in single-phase or differential form and with low or controlled output impedance. Indeed, there is a power supply required for that, but, most high quality microphone input standards are does not offer power output line. There is another drawback: active circuit adds noise itself, so, there is a balance between added and rejected noise. Also, we do not talk here about added non-linearity distortions, dynamic range limitation, power line collected noise, as these can be eliminated more or less effectively today.
+Active are "simple" (and cheap today), and they are "just" an LNA, placed near capsule, then outputs amplified signal in single-phase or differential form and with low or controlled output impedance. Indeed, there is a power supply required for that, but, most high quality microphone input standards are does not offer power output line (country dependent). There is another drawback: active circuit adds noise itself, so, there is a balance between added and rejected noise. Also, we do not talk here about added non-linearity distortions, dynamic range limitation, power line collected noise, as these can be eliminated more or less effectively today.
 
 Let's take a look at passive one. Despite of its name, it is a way more expensive, due to it requires high quality wideband transformer. The key parameter of transformer is windings _inductance_. That means either very high magnetic permeability yet wide frequency band core (often impossible to obtain today); or, regular ferrite, but, to keep inductance, it will be very large (at least, way larger than you can find in some microphones). Largest possible size also unavoidable to keep both _resistive_ and _magnetic_ power losses (we have _too_ little power to just lost it!).
 
@@ -85,7 +85,7 @@ The problem is resistive tap is rarely useful due to resistors itself adds noise
 
 > Wut? 4-wire microphone? :-[     ]
 
-It is 5-wire.
+It is 5-wire. But, yes, we will call it 4-wire here.
 
 We will use 5(7)-pin DIN connector, some extra wiring, and one extra stereo ADC, for almost zero extra hardware price.
 
@@ -134,7 +134,7 @@ Post processing
 
 We have added some extra filters recently, together with bypass switch for each. As well as 2- or 4-wire mic selector was added, so now our plugin will work well with both regular and 4-wire microphones. It's worth to check `.dsp` source code for filters descriptions. Full instruction manual is WIP, due to final filters set is not settled yet.
 
-Please let me know how you like new mains hum remover, especially if you have noisy (distorted) mains lines around. Note that we have run time fine-tuned mains frequency to reject. Base frequency value is changed at `.dsp` file.
+Please let me know how you like new mains hum remover, especially if you have noisy (distorted) mains lines around, when single mains frequency notch filter not helps much. Note that we have run time fine-tuned mains frequency to reject. Base frequency value is changed at `.dsp` file.
 
 <img width="1494" height="216" alt="mightymic" src="https://github.com/user-attachments/assets/69ae37c9-2b02-47ee-bc84-a6bb05bcb05f" />
 
