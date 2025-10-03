@@ -178,7 +178,7 @@ Our setup is highly immune to that. Some differential non-equivalency are easily
 
 **Electric guitars?**
 
-Any analog input welcome! But if it is _UNbalanced_ (Tip-Ring, or TS connector, like most electric guitars), you'll need to recompile, search for `UNbalanced` at code. Please leave your feedback!
+Any analog input welcome! But if it is _UNbalanced_ (Tip-Ring, or TS connector, like most electric guitars), you'll need to recompile, search for `UNbalanced` at code. Obviously, to take advantage of 4-wire magic, transformer is required, and it'll then provide balanced output as a bonus.
 
 **Disadvantages?**
 
