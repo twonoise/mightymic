@@ -196,7 +196,7 @@ Glossary
 * SNR: Signal to Noise ratio.
 * LPF: Low pass filter.
 * EMI: Electromagnetic interference, cables pickup noise due to it.
-* ADC: Andlog to Digital converter, like _input_ of PC or sound card.
+* ADC: Analog to Digital converter, like _input_ of PC or sound card.
 * ENOB: Effective number of bits, "real" (heavy-loading) ADC/DAC SNR measure, unlike of just silence noise floor.
 * AGC: Auto gain control.
 * Mixing: Audio people uses it as (linear) _adding_ but not multiplying.
