@@ -134,7 +134,7 @@ Post processing
 
 We have added some extra filters recently, together with bypass switch for each. As well as 2- or 4-wire mic selector was added, so now our plugin will work well with both regular and 4-wire microphones. It's worth to check `.dsp` source code for filters descriptions. Full instruction manual is WIP, due to final filters set is not settled yet.
 
-Please let me know how you like new mains hum remover, especially if you have noisy (distorted) mains lines around, when single mains frequency notch filter not helps much. Note that we have run time fine-tuned mains frequency to reject. Base frequency value is changed at `.dsp` file.
+Please let me know how you like new mains hum remover, especially if you have noisy (distorted) mains lines around, when single point mains frequency notch filter not helps much. Note that we have run time fine-tuned value of mains frequency to reject. Base frequency value is changed at `.dsp` file.
 
 <img width="1494" height="216" alt="mightymic" src="https://github.com/user-attachments/assets/69ae37c9-2b02-47ee-bc84-a6bb05bcb05f" />
 
