@@ -107,7 +107,7 @@ We offer also test signal source (using `Faust`, again) as sum of 420 and 440 Hz
 > [!Important]
 > `alsamixer` should be used to set same settings for both ADCs.
 
-Btw, one may note that _float value storage_  is implemented in same way: It have momentary SNR of 25 bits (24 + sign) (for 32-bit floats), while way more long-time dynamic range. It is just full of these transition points each 3 dB.
+Btw, one may note that _float value storage_  is implemented in same way: It have momentary SNR of 25 bits (24 + sign) (for 32-bit floats), while way more long-time dynamic range. It is just full of these transition points each 3 dB. Each transition point changes noise by 3 dB, even if transition itself is small but still crosses the boundary. As all today's DAWs uses floats, this can be seen using output volume knobs offered by plugin host per each plugin, fine-tuning it near its 1.0 or 0.5 position, and see the output noise floor with sensitive VU meter or spectrum analyzer.
 
 Here are test results with test signal source. One may recall that 3rd order IMD's extra frequency components (easily seen as extra blue peaks) are _extremely_ sensitive to any overload as non-linearity. So one may exactly know if no IMD are introduced, when no extra peaks.
 
