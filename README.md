@@ -203,6 +203,7 @@ Glossary
 * DNR: Dynamic Noise Reduction (Analog noise gate).
 * THD: Total harmonic distortion, most often due to non-linearity. Sum of all IMDx.
 * IMD: Intermodulation distortion. Most important is IMD3 part, because it falls to in-band.
+* EIN: Equivalent input noise [^2].
 * DAW: Digital audio workstation, in our case it is realtime DSP chain.
 * TBD: To be displayed.
 * WIP: Work in progress.
@@ -216,3 +217,4 @@ Included software is licensed as per LICENSE file.
 
 
 [^1]: https://www.eeweb.com/enhance-adc-dynamic-range/
+[^2]: https://kokkinizita.linuxaudio.org/papers/amworkshop1.pdf
