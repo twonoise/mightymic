@@ -4,7 +4,8 @@ I've tested with Archlinux. Sorry, don't know how it will work for others.
 
 Install:
 -------
-Please see at top of `.dsp` files.
+    pacman -S boost faust
+Then, please see at top of `.dsp` files.
 
 Uninstall:
 ---------
