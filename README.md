@@ -152,6 +152,8 @@ This one is closer. The problem is input capacitance of ADCs (and wiring). The 4
 
 Btw, system input capacitance is limiting factor for transformer gain: As it replicated backwards to the membrane capacitive load at same ratio as transformer winding ratio, so, the more ratio, the more spectral slope fall of high frequencies. More windings also can give high _self_ capacitance (time to increase core size).
 
+Happily, there are also good news. Most of mic transducer capsules, both branded and fakes, are increases efficiency at high freqs. Also, looks like, most of them are love, if not require, some capacitive load, like LP needle cartridges. So even with long cable, sound tend to be perfect and solid, and sometimes it even better to either add even more extra capacitance, or, add some negative slope with our frequency responce tilt correction knob.
+
 **Can this plugin be made even more strong, with _same_ hardware?**
 
 We let our readers to answer it.
