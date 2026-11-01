@@ -77,7 +77,7 @@ Well, that works fine!
 But if mic is fake (output amplitude of capsule is low, or, capsule DC resistance is _too_ hidh for that output), singer can note earlier on later that there is **low dynamic range** of our setup (or, which is same **(*)**, still low SNR). Are we take all the best our setup offers, or time to think more?
 > **(*)** If we're not reached membrane resonance yet.
 
-Best solution here is, exactly with loudspeakers world, is just to add extra microphone. But it is weird for singer to hangle this setup in hand, so it is "best" electrically only, and quite weird in practice. Another ideas?
+Best solution here is, exactly with loudspeakers world, is just to add extra microphone. But it is weird for singer to handle this setup in hand, so it is "best" electrically only, and quite weird in practice. Another ideas?
 
 When ADCs quantity is enough (in our case, if we have one more _stereo_ ADC), i am use simple approach to extend dynamic a bit. Just feed a part (often a half of voltage) of input to separate ADC, and use this channel when main one is overloaded. This gives 3 dB extra overload margin. But also adds some amount of noise: 3 dB during the periods of overload of main channel, and 0 dB else. In terms of music, added noise are well masked with strong signal peaks at these moments. For sum of two sine waves, there will be ~0.6 dB _total_ (long-term) noise added, so we won ~2.4 dB of measurable ("real") SNR or dynamic, or in simple words, have extra 3 dB for voice peaks while keep near same (for non-peaked voice part, is _exactly_ same) noise.
 
