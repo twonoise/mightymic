@@ -1,6 +1,8 @@
 # mightymic
 High dynamic range passive mic with JACK, LV2, and Faust
 
+<img alt="mightymic" src="https://github.com/user-attachments/assets/a45ab418-ab8a-4265-bf8f-a7659388b4ee" />
+
 DESCRIPTION
 -----------
 
