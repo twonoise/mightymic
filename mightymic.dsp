@@ -1,4 +1,4 @@
-// faust2lv2 mightymic.dsp  &&  sed -i -e 's/in0/In/g' -e 's/in1/InInv/g' -e 's/in2/InPeak/g' -e 's/in3/InPeakInv/g' -e 's/out0/Out0/g' -e 's/out1/Out1/g' -e 's/out2/Thru/g' -e 's/out3/ThruPeak/g' -e 's/out4/UNUSED0/g' -e 's/out5/UNUSED1/g' -e 's/out6/UNUSED2/g' -e 's/out7/UNUSED3/g' -e '/lv2:name "Overload/a\\tlv2:portProperty lv2:integer ;' -e '/lv2:name "Mains D/a\\tlv2:portProperty lv2:integer ;' -e '/lv2:name "Notch/a\\tlv2:portProperty lv2:integer ;\n\tlv2:scalePoint [ rdfs:label "Off"; rdf:value 0 ] ;\n\tlv2:scalePoint [ rdfs:label "Odd Only"; rdf:value 1 ] ;\n\tlv2:scalePoint [ rdfs:label "All"; rdf:value 2 ] ;' mightymic.lv2/mightymic.ttl  &&  cp -R ./mightymic.lv2/ /usr/local/lib/lv2/
+// faust2lv2 mightymic.dsp  &&  sed -i -e 's/in0/In/g' -e 's/in1/InInv/g' -e 's/in2/InPeak/g' -e 's/in3/InPeakInv/g' -e 's/out0/Out/g' -e 's/out1/OutDry/g' -e 's/out2/Thru/g' -e 's/out3/ThruPeak/g' -e 's/out4/UNUSED0/g' -e 's/out5/UNUSED1/g' -e 's/out6/UNUSED2/g' -e 's/out7/UNUSED3/g' -e '/lv2:name "Overload/a\\tlv2:portProperty lv2:integer ;' -e '/lv2:name "Mains D/a\\tlv2:portProperty lv2:integer ;' -e '/lv2:name "Notch/a\\tlv2:portProperty lv2:integer ;\n\tlv2:scalePoint [ rdfs:label "Off"; rdf:value 0 ] ;\n\tlv2:scalePoint [ rdfs:label "Odd Only"; rdf:value 1 ] ;\n\tlv2:scalePoint [ rdfs:label "All"; rdf:value 2 ] ;' mightymic.lv2/mightymic.ttl  &&  cp -R ./mightymic.lv2/ /usr/local/lib/lv2/
 
 
 declare name "MightyMic"; // No spaces for better JACK port names.
@@ -8,7 +8,6 @@ declare license "MIT";
 declare description "2 & 4-wire mic frontend. See readme at github.com/twonoise/mightymic";
 
 import("stdfaust.lib");
-import("filters.lib");
 
 
 /* Differential inputs section */
@@ -18,13 +17,13 @@ diff(x,y) = (x - y) / 2;
 
 /* 4 wire section */
 
-EN4WIRE = checkbox("[0] 4 Wire");
+EN4WIRE = checkbox("[00] 4 Wire");
 
 // IMPORTANT!
 // MUST exactly match attenuation of secondary attenuated output of mic!
 // Often it is turns ratio of attenuated to straight windings output.
 // Most often it is 0.5 (attenuated is half of whole winding).
-RATIO = hslider("[1] Ratio", 0.5, 0.1, 0.9, 0.001);
+RATIO = hslider("[01] Ratio", 0.5, 0.1, 0.9, 0.001);
 
 // We need not single point but some transition band, if some
 // compression is possible near range limit of ADCs; or, we lower
@@ -38,11 +37,13 @@ mux2(x,y) = select2(overload(x), x * RATIO, y);
 
 micout(x,y) = select2(EN4WIRE, x, mux2(x,y));
 
+
 /* Metering helper subsection */
 
 // Real ratio meter, works when sounding into 4-wire mic without overloads.
 // Use it to set Ratio control.
 envelope = abs : max ~ -(0.2/ma.SR);
+
 ratioMeasured(x,y) = select2(envelope(x) > 0.01, 0, envelope(y) / envelope(x));
 
 
@@ -51,17 +52,19 @@ ratioMeasured(x,y) = select2(envelope(x) > 0.01, 0, envelope(y) / envelope(x));
 // IIR Comb (all harmonics) suppressor, incl. Odd-Only mode, with Q factor.
 
 // Mains frequency is compile-time value.
-MAINSFREQIDEAL = 60; // 60 or 50, or 400 sometimes
+MAINSFREQBASE = 60; // 60 or 50, or 400 sometimes
 
-notchmode = nentry("[4] Notch", 0, 0, 2, 1) : int;
+notchmode = nentry("[03] Notch [style:menu{'Off':0;'Odd Only':1;'All':2}]", 0, 0, 2, 1) : int;
+
 div = select2((notchmode == 1), 1, 2);
-Q = hslider("[5] Q", 5, 1, 33, 1) : abs;
+
+Q = hslider("[04] Q", 5, 1, 33, 1) : abs;
 
 // S is samples q'ty for delay, ma.SR is current sample rate (internal func).
 // Note that for all 60 & 50 Hz & 44.1 & 48 kS/s multiplies combinations, there is integer division; while for like 16 or 22.5 kS/s, 60 Hz will give some offset.
 // Additionally, for Odd Only obertones, 60 Hz @ 44.1 kS/s will also give some offset.
-// See real value with mains freq. meter provided.
-S = abs(round(ma.SR / MAINSFREQIDEAL / div - nentry("[6] Mains Detune", 0, -5, 5, 1)));
+// See real value with display provided.
+S = abs(round(ma.SR / MAINSFREQBASE / div - nentry("[05] Mains Detune", 0, -5, 5, 1)));
 
 // IIR Comb filter.
 // Nobody knows how it works! Despite of its tiny look, it is result of long and massive blind trials and errors. Long story short, i am try to make it according to theory [1]. It is essential that we do not need just comb filter which is just (x - x_delayed). Rather, we need it to have Q factor. The difference is narrow notches, note picture at [1]. But problem is what to do with "b" "multiplier" (see H(z)=... at [1]). The transformation (2)->(3) (transfer "function" to Faust-compatible form) as per [2], is not known with "multiplier" in transfer "function". However, happily, we have Q > 1 now. Check and FIXME someone else, please! DSP students welcome.
@@ -70,35 +73,73 @@ S = abs(round(ma.SR / MAINSFREQIDEAL / div - nentry("[6] Mains Detune", 0, -5, 5
 // [3] Fig. 2.27 from https://www.dsprelated.com/freebooks/pasp/Comb_Filters.html
 iircombnotch(x) = kernel ~ _
   with { kernel(y) = (1.0-0.5/Q) * (x - x@(S)) + (1.0-1.0/Q) * y@(S-1) ; };
+
 iircombnotchodd(x) = kernel ~ _
   with { kernel(y) = (1.0-0.5/Q) * (x + x@(S)) - (1.0-1.0/Q) * y@(S-1) ; };
-notch = _ <: _, iircombnotchodd, iircombnotch :> select3(notchmode);
+
+notch = _ <: _,
+  iircombnotchodd,
+  iircombnotch
+:> select3(notchmode);
 
 // LM1894 DNR
 envelopeFastLimited = abs : min(1.0) : max ~ -(2.0/ma.SR) ; // Max = 1.0
-sensitivity = hslider("[9] LM1894 Sens.", 0.1, 0, 1, 0.01);
-bw(x) = 1000 + 19000 * (envelopeFastLimited(x * sensitivity * 10.0));
-lm1894(x) = lowpass(FLT_ORD, bw(x));
+
+sensitivity = hslider("[08] LM1894 Sens.", 1.0, 0, 10.0, 0.1);
+
+bw(x) = 1000 + 19000 * envelopeFastLimited(x * sensitivity);
+
+lm1894(x) = fi.lowpass(FLT_ORD, bw(x));
+
 dnr = _ <: _,
   lm1894
-:> select2(checkbox("[8] LM1894"));
+:> select2(checkbox("[07] LM1894"));
 
 // Spectral tilt to rectify microphone frequency responce a bit
 tilt = _ <: _,
-  spectral_tilt(3, 20, 10000, nentry("[A] Tilt dB/Oct", 0, -6, 6, 1) : int / 6.0)
-:> select2(checkbox("[A] Tilt"));
+  fi.spectral_tilt(3, 20, 10000, nentry("[10] Tilt dB/Oct [unit:dB/Oct]", 0, -6.0, 6.0, 0.1) / 6.0)
+:> select2(checkbox("[09] Tilt"));
 
 // Robot voice, as per request, but it's strange, no real use i think.
 fbcf(del, g, x) = loop ~ _ with { loop(y) = x + y@(del - 1) * g; }; // Thanks to https://github.com/LucaSpanedda/Digital_Reverberation_in_Faust
+
 robot = _ <: _,
-  fbcf(nentry("[D] Robot Size", 5000, 1000, 10000, 100) : int, 0.9)
-:> select2(checkbox("[C] Robot"));
+  fbcf(nentry("[12] Robot Size", 5000, 1000, 10000, 100) : int, 0.9)
+:> select2(checkbox("[11] Robot"));
+
+
+// Voice exciter using LP needle tracing error behaviour.
+needleR = hslider("[14] Needle R", 1.5, -5.0, 5.0, 0.1);
+dly     = hslider("[15] Symmetry", 0.0,    0, 1.0, 0.01);
+
+// 1st derivative scaled to some point, stable across variation of sample rates.
+deri(a, x) = (x - x@(1)) * ma.SR / 1000.0;
+
+// Optional delay in samples must be non-negative integer.
+// As it impossible to be freq-independent, we use 440 Hz as reference point, at which we provide 360 degree of phase rotation. Other freqs will differ.
+delay = abs(round(dly * ma.SR / 440));
+
+// Tracing error 1st order approximation. Note rectifier as 'abs'.
+tracingError = abs(fi.spectral_tilt(2, 20, 10000, -1.0) : deri(-1) * abs(needleR)) @ delay;
+tracingErrorSign = -1, 1 :> select2(needleR > 0);
+
+tracingexciter = _ <: _,
+  (
+    // Original voice
+    _
+    // Added distortion
+    + tracingError * tracingErrorSign
+    // Centered at zero volts,
+    : fi.dcblocker
+  )
+:> select2(checkbox("[13] LP Exciter"));
+
 
 // Finally, regular microphone LPF.
-AUDIO_BW_HZ = hslider("[E] BW Hz", 20000, 500, 20000, 500);
+AUDIO_BW_HZ = hslider("[16] BW [unit:Hz]", 20000, 500, 20000, 500);
 FLT_ORD = 3;
 
-OUTPUTLEVEL = hslider("[H] Output Level", 1.0, 0, 5.0, 0.1);
+OUTPUTLEVEL = hslider("[17] Output Level", 1.0, 0, 5.0, 0.1);
 
 
 process =
@@ -108,28 +149,35 @@ process =
   // OR
   // _,_ <: // Straight and Attenuated: single (UNbalanced) inputs
 
-  // 1. Two identical mono outputs
+  // 1. Processing chain.
   (
-    micout        // This one have two inputs and mono output;
-    : notch       // The following all are mono.
-    : dnr
-    : tilt
-    : robot
-    : lowpass(FLT_ORD, AUDIO_BW_HZ)
-    * OUTPUTLEVEL <: _,_
+    micout  <:    // This one have two inputs and mono output;
+    (
+        notch       // The following are two mono chains:
+      : dnr
+      : tilt
+      : robot
+      : tracingexciter
+      : fi.lowpass(FLT_ORD, AUDIO_BW_HZ)
+      * OUTPUTLEVEL : _    // Mono output with effects.
+    ) ,
+    (
+        fi.lowpass(FLT_ORD, AUDIO_BW_HZ)
+      * OUTPUTLEVEL : _    // Dry mono output with LPF only.
+    )
   ) ,
 
-  // 2. Thru line (outputs) unbalanced, Straight and Attenuated.
+  // 2. Thru line (outputs) unbalanced (for oscope), Straight and Attenuated.
   (_,_)
 
-  // How it compiles, but adds extra unused audio ports.
   // 3. LEDs & meters, with unneeded outputs.
-  //    Rename to UNUSED also included in compile command above as a workaround.
-  , (overloadLed : int : vbargraph("[E] Overload0 [CV:0]", 0, 1))
-  , (overloadLed : int : vbargraph("[F] Overload1 [CV:1]", 0, 1))
-  , (ratioMeasured :     vbargraph("[2] Ratio Meter [CV:2]", 0, 1))
-  , (ma.SR / S / div :   vbargraph("[7] Mains Freq [CV:3]", 0, 1000))
-  // (3). How it should be: but lost ports.
-  // , (overloadLed : int : vbargraph("[E] Overload0 [CV:0]", 0, 1) : !)
+  // This compiles, but adds extra unused audio ports.
+  // Rename to UNUSED also included in compile command above as a workaround.
+  , (overloadLed : int : hbargraph("[18] [style:led] Overload0 [CV:0]", 0, 1))
+  , (overloadLed : int : hbargraph("[19] [style:led] Overload1 [CV:1]", 0, 1))
+  , (ratioMeasured     : hbargraph("[02] [style:numerical] Ratio Meter [CV:2]", 0, 1))
+  , (ma.SR / S / div   : hbargraph("[06] [style:numerical] Mains Freq [CV:3] [unit:Hz]", 0, 1000))
+  // (3). How it should be: but lost meters. attach() not work with '!'.
+  // , (overloadLed : int : hbargraph("[I] Overload0 [CV:0]", 0, 1) : !)
   // ...
 ;
